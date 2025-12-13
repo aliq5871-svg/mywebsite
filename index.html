@@ -1,44 +1,55 @@
 <!doctype html>
 <html lang="ms" class="h-full">
  <head>
-   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
-  <!-- LOCAL DATA SDK (GitHub Compatible) -->
-  <script>
-    window.dataSdk = {
-      init(handler) {
-        const data = JSON.parse(localStorage.getItem("sps_data") || "[]");
-        handler.onDataChanged(data);
-        return Promise.resolve({ isOk: true });
-      },
+<script>
+ const firebaseConfig = {
+  apiKey: "AIzaSyBfDXjt_-6cBG1wzhr5MUJz29VLGx_oTcc",
+  authDomain: "portal-sps-ppd-kota-marudu.firebaseapp.com",
+  projectId: "portal-sps-ppd-kota-marudu",
+  storageBucket: "portal-sps-ppd-kota-marudu.firebasestorage.app",
+  messagingSenderId: "370438750434",
+  appId: "1:370438750434:web:89a9c4b515f881ffad1ebb"
+};
 
-      create(item) {
-        const data = JSON.parse(localStorage.getItem("sps_data") || "[]");
-        item.__backendId = Date.now().toString();
-        data.push(item);
-        localStorage.setItem("sps_data", JSON.stringify(data));
-        return Promise.resolve({ isOk: true });
-      },
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-      update(item) {
-        let data = JSON.parse(localStorage.getItem("sps_data") || "[]");
-        data = data.map(d =>
-          d.__backendId === item.__backendId ? item : d
-        );
-        localStorage.setItem("sps_data", JSON.stringify(data));
-        return Promise.resolve({ isOk: true });
-      },
+  window.dataSdk = {
+    init(handler) {
+      db.collection("sps_data")
+        .orderBy("createdAt")
+        .onSnapshot(snapshot => {
+          const data = [];
+          snapshot.forEach(doc => {
+            data.push({ __backendId: doc.id, ...doc.data() });
+          });
+          handler.onDataChanged(data);
+        });
+      return Promise.resolve({ isOk: true });
+    },
 
-      delete(item) {
-        let data = JSON.parse(localStorage.getItem("sps_data") || "[]");
-        data = data.filter(d =>
-          d.__backendId !== item.__backendId
-        );
-        localStorage.setItem("sps_data", JSON.stringify(data));
-        return Promise.resolve({ isOk: true });
-      }
-    };
+    create(item) {
+      item.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      return db.collection("sps_data").add(item)
+        .then(() => ({ isOk: true }));
+    },
+
+    update(item) {
+      const id = item.__backendId;
+      delete item.__backendId;
+      return db.collection("sps_data").doc(id).update(item)
+        .then(() => ({ isOk: true }));
+    },
+
+    delete(item) {
+      return db.collection("sps_data").doc(item.__backendId).delete()
+        .then(() => ({ isOk: true }));
+    }
+  };
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -3005,5 +3016,6 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
