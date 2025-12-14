@@ -62,11 +62,15 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
-      width: 100%;
-      box-sizing: border-box;
-    }
+   html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
 
     body {
       font-family: 'Poppins', 'Inter', sans-serif;
@@ -510,13 +514,15 @@
     }
 
     .footer-copyright {
-      footer {
-  text-align: center;
-  padding: 6px 10px;   /* KECILKAN petak */
-  font-size: 11px;     /* Teks lebih kecil */
-  color: #666;
-  line-height: 1.3;
-}
+      text-align: center;
+      color: #777;
+      font-size: 0.85rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 123, 255, 0.1);
+      width: 100%;
+      max-width: 600px;
+      transition: all 0.3s ease;
+    }
 
     body.dark-mode .footer-copyright {
       color: #999;
@@ -3014,6 +3020,7 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
 
