@@ -2446,11 +2446,21 @@
               <p style="color: #666; font-weight: 600;">Prasekolah</p>
             </div>
             
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🏢</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${schoolStats?.sekolah_swasta || 3}</h3>
-              <p style="color: #666; font-weight: 600;">Sekolah Swasta</p>
-            </div>
+           <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 219, 77, 0.05) 100%); border-left: 4px solid #ffc107; text-align: center;">
+  <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
+  <h3 style="font-size: 2.5rem; font-weight: 700; color: #ffc107; margin-bottom: 0.5rem;">
+    ${schoolStats?.sekolah_swasta_rendah || 2}
+  </h3>
+  <p style="color: #666; font-weight: 600;">Sekolah Swasta Rendah</p>
+</div>
+<div class="grid-item" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(72, 199, 116, 0.05) 100%); border-left: 4px solid #28a745; text-align: center;">
+  <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
+  <h3 style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin-bottom: 0.5rem;">
+    ${schoolStats?.sekolah_swasta_menengah || 1}
+  </h3>
+  <p style="color: #666; font-weight: 600;">Sekolah Swasta Menengah</p>
+</div>
+
             
             <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
               <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
@@ -2650,8 +2660,18 @@
             <input type="number" class="form-input" id="prasekolah" value="${stats?.prasekolah || 12}" required>
           </div>
           <div class="form-group">
-            <label class="form-label" for="sekolahSwasta">Sekolah Swasta</label>
-            <input type="number" class="form-input" id="sekolahSwasta" value="${stats?.sekolah_swasta || 3}" required>
+            <div class="form-group">
+  <label class="form-label" for="swastaRendah">Sekolah Swasta Rendah</label>
+  <input type="number" class="form-input" id="swastaRendah"
+    value="${stats?.sekolah_swasta_rendah || 2}" required>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="swastaMenengah">Sekolah Swasta Menengah</label>
+  <input type="number" class="form-input" id="swastaMenengah"
+    value="${stats?.sekolah_swasta_menengah || 1}" required>
+</div>
+>
           </div>
           <div class="form-group">
             <label class="form-label" for="tingkatanEnam">Pusat Tingkatan Enam</label>
@@ -3014,6 +3034,7 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
 
