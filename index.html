@@ -2445,6 +2445,14 @@
               <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${schoolStats?.prasekolah || 12}</h3>
               <p style="color: #666; font-weight: 600;">Prasekolah</p>
             </div>
+            <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 99, 132, 0.1) 0%, rgba(255, 159, 159, 0.05) 100%); border-left: 4px solid #ff6384; text-align: center;">
+  <div style="font-size: 3rem; margin-bottom: 1rem;">🧒</div>
+  <h3 style="font-size: 2.5rem; font-weight: 700; color: #ff6384; margin-bottom: 0.5rem;">
+    ${schoolStats?.prasekolah_swasta || 3}
+  </h3>
+  <p style="color: #666; font-weight: 600;">Prasekolah Swasta</p>
+</div>
+
             
            <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 219, 77, 0.05) 100%); border-left: 4px solid #ffc107; text-align: center;">
   <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
@@ -2659,7 +2667,11 @@
             <label class="form-label" for="prasekolah">Prasekolah</label>
             <input type="number" class="form-input" id="prasekolah" value="${stats?.prasekolah || 12}" required>
           </div>
-          <div class="form-group">
+         <div class="form-group">
+  <label class="form-label" for="prasekolahSwasta">Prasekolah Swasta</label>
+  <input type="number" class="form-input" id="prasekolahSwasta"
+    value="${stats?.prasekolah_swasta || 3}" required>
+</div>
             <div class="form-group">
   <label class="form-label" for="swastaRendah">Sekolah Swasta Rendah</label>
   <input type="number" class="form-input" id="swastaRendah"
@@ -2708,6 +2720,7 @@
           sekolah_menengah: parseInt(document.getElementById('sekolahMenengah').value),
           sekolah_k9: parseInt(document.getElementById('sekolahK9').value),
           prasekolah: parseInt(document.getElementById('prasekolah').value),
+         prasekolah_swasta: parseInt(document.getElementById('prasekolahSwasta').value),
          sekolah_swasta_rendah: parseInt(document.getElementById('swastaRendah').value),
           sekolah_swasta_menengah: parseInt(document.getElementById('swastaMenengah').value),
           tingkatan_enam: parseInt(document.getElementById('tingkatanEnam').value),
@@ -3035,6 +3048,7 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
 
