@@ -1747,6 +1747,12 @@
                 
                 return `
                 <div class="grid-item">
+                ${news.image_url ? `
+  <img src="${news.image_url}"
+       style="width:100%; height:180px; object-fit:cover; border-radius:12px; margin-bottom:0.8rem;"
+       onerror="this.style.display='none'">
+` : ''}
+
                   <p style="font-size: 0.85rem; color: #007bff; font-weight: 600; margin-bottom: 0.5rem;">${news.date || ''}</p>
                   <h3 style="color: #333; margin-bottom: 0.8rem; font-size: 1.2rem;">${news.title}</h3>
                   <p style="line-height: 1.6; color: #666;">${news.description || ''}</p>
@@ -2099,6 +2105,10 @@
             <textarea class="form-textarea" id="newsDescription" rows="4" required></textarea>
           </div>
           <div class="form-group">
+  <label class="form-label" for="newsImage">URL Gambar (pilihan)</label>
+  <input type="url" class="form-input" id="newsImage" placeholder="https://contoh.com/gambar.jpg">
+</div>
+          <div class="form-group">
             <label class="form-label" for="newsLink">Link Muat Turun</label>
             <input type="url" class="form-input" id="newsLink" placeholder="https://contoh.com/lampiran.pdf">
           </div>
@@ -2116,6 +2126,7 @@
           title: document.getElementById('newsTitle').value,
           date: document.getElementById('newsDate').value,
           description: document.getElementById('newsDescription').value,
+         image_url: document.getElementById('newsImage').value,
           download_link: document.getElementById('newsLink').value,
           likes: 0,
           views: 0,
@@ -3048,6 +3059,7 @@
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
 
