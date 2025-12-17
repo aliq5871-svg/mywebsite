@@ -2996,7 +2996,13 @@ function renderPertukaranMenengah() {
   document.getElementById('modalTitle').textContent = 'Permohonan Pertukaran Murid Menengah';
 
   document.getElementById('modalBody').innerHTML = `
-    <form id="pertukaranForm">
+    <form id="formPertukaranMenengah">
+  <input id="namaMurid" placeholder="Nama Murid" required>
+  <input id="noKP" placeholder="No KP" required>
+  <input id="sekolahAsal" placeholder="Sekolah Asal" required>
+  <input id="sekolahBaharu" placeholder="Sekolah Baharu" required>
+</form>
+
       <div class="form-group">
         <label class="form-label">Nama Murid</label>
         <input class="form-input" id="namaMurid" required>
@@ -3021,7 +3027,39 @@ function renderPertukaranMenengah() {
         </select>
       </div>
 
-      <button class="btn" type="submit">Simpan</button>
+     <button type="button" onclick="simpanPertukaranMenengah()">
+  Simpan
+</button>
+<script>
+function simpanPertukaranMenengah() {
+
+  const data = {
+    namaMurid: document.getElementById("namaMurid").value,
+    noKP: document.getElementById("noKP").value,
+    sekolahAsal: document.getElementById("sekolahAsal").value,
+    sekolahBaharu: document.getElementById("sekolahBaharu").value,
+    kategori: "Menengah",
+    createdAt: new Date()
+  };
+
+  if (!data.namaMurid || !data.noKP || !data.sekolahAsal || !data.sekolahBaharu) {
+    alert("❗ Sila lengkapkan semua maklumat");
+    return;
+  }
+
+  window.dataSdk.create(data)
+    .then(() => {
+      alert("✅ Permohonan pertukaran berjaya disimpan");
+      document.getElementById("formPertukaranMenengah").reset();
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Gagal simpan data");
+    });
+}
+</script>
+
+
       <button class="btn btn-delete" type="button" onclick="closeModal()">Batal</button>
     </form>
   `;
@@ -3186,6 +3224,7 @@ function renderPertukaranMenengah() {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+
 
 
 
