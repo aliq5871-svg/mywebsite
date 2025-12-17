@@ -1,100 +1,99 @@
 <!doctype html>
 <html lang="ms" class="h-full">
-<head>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
+ <head>
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
-  <script>
-    // ================= FIREBASE =================
-    const firebaseConfig = {
-      apiKey: "AIzaSyBfDXjt_-6cBG1wzhr5MUJz29VLGx_oTcc",
-      authDomain: "portal-sps-ppd-kota-marudu.firebaseapp.com",
-      projectId: "portal-sps-ppd-kota-marudu",
-      storageBucket: "portal-sps-ppd-kota-marudu.firebasestorage.app",
-      messagingSenderId: "370438750434",
-      appId: "1:370438750434:web:89a9c4b515f881ffad1ebb"
-    };
+<script>
+ const firebaseConfig = {
+  apiKey: "AIzaSyBfDXjt_-6cBG1wzhr5MUJz29VLGx_oTcc",
+  authDomain: "portal-sps-ppd-kota-marudu.firebaseapp.com",
+  projectId: "portal-sps-ppd-kota-marudu",
+  storageBucket: "portal-sps-ppd-kota-marudu.firebasestorage.app",
+  messagingSenderId: "370438750434",
+  appId: "1:370438750434:web:89a9c4b515f881ffad1ebb"
+};
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    window.dataSdk = {
-      init(handler) {
-        db.collection("sps_data")
-          .orderBy("createdAt")
-          .onSnapshot(snapshot => {
-            const data = [];
-            snapshot.forEach(doc => {
-              data.push({ __backendId: doc.id, ...doc.data() });
-            });
-            handler.onDataChanged(data);
+  window.dataSdk = {
+    init(handler) {
+      db.collection("sps_data")
+        .orderBy("createdAt")
+        .onSnapshot(snapshot => {
+          const data = [];
+          snapshot.forEach(doc => {
+            data.push({ __backendId: doc.id, ...doc.data() });
           });
-        return Promise.resolve({ isOk: true });
-      },
-
-      create(item) {
-        item.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        return db.collection("sps_data").add(item)
-          .then(() => ({ isOk: true }));
-      },
-
-      update(item) {
-        const id = item.__backendId;
-        delete item.__backendId;
-        return db.collection("sps_data").doc(id).update(item)
-          .then(() => ({ isOk: true }));
-      },
-
-      delete(item) {
-        return db.collection("sps_data").doc(item.__backendId).delete()
-          .then(() => ({ isOk: true }));
-      }
-    };
-
-    // ================= UI =================
-    function closeModal() {
-      document.getElementById("genericModal")?.classList.remove("active");
-    }
-
-    function showToast(msg) {
-      alert(msg);
-    }
-
-    // ================= SIMPAN PERTUKARAN =================
-    async function simpanPertukaranMenengah(e) {
-      e.preventDefault();
-
-      const namaMurid = document.getElementById("namaMurid");
-      const sekolahAsal = document.getElementById("sekolahAsal");
-      const sekolahBaharu = document.getElementById("sekolahBaharu");
-      const status = document.getElementById("status");
-
-      if (!namaMurid.value || !sekolahAsal.value || !sekolahBaharu.value) {
-        alert("Sila lengkapkan semua maklumat");
-        return;
-      }
-
-      try {
-        const result = await window.dataSdk.create({
-          type: "pertukaran_menengah",
-          nama_murid: namaMurid.value,
-          sekolah_asal: sekolahAsal.value,
-          sekolah_baharu: sekolahBaharu.value,
-          status: status.value,
-          tarikh: new Date().toLocaleDateString("ms-MY"),
+          handler.onDataChanged(data);
         });
+      return Promise.resolve({ isOk: true });
+    },
 
-        if (result.isOk) {
-          showToast("✅ Permohonan direkodkan");
-          closeModal();
-        }
-      } catch (err) {
-        console.error(err);
-        alert("❌ Gagal menyimpan permohonan");
-      }
+    create(item) {
+      item.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      return db.collection("sps_data").add(item)
+        .then(() => ({ isOk: true }));
+    },
+
+    update(item) {
+      const id = item.__backendId;
+      delete item.__backendId;
+      return db.collection("sps_data").doc(id).update(item)
+        .then(() => ({ isOk: true }));
+    },
+
+    delete(item) {
+      return db.collection("sps_data").doc(item.__backendId).delete()
+        .then(() => ({ isOk: true }));
     }
+  };
   </script>
+function closeModal() {
+  document.getElementById("genericModal")?.classList.remove("active");
+}
+
+function showToast(msg) {
+  alert(msg); // ringkas & selamat (boleh tukar UI nanti)
+}
+</script>
+async function simpanPertukaranMenengah(e) {
+  e.preventDefault();
+
+  const namaMurid = document.getElementById("namaMurid");
+  const sekolahAsal = document.getElementById("sekolahAsal");
+  const sekolahBaharu = document.getElementById("sekolahBaharu");
+  const status = document.getElementById("status");
+
+  if (!namaMurid.value || !sekolahAsal.value || !sekolahBaharu.value) {
+    alert("Sila lengkapkan semua maklumat");
+    return;
+  }
+
+  try {
+    const result = await window.dataSdk.create({
+      type: "pertukaran_menengah",
+      nama_murid: namaMurid.value,
+      sekolah_asal: sekolahAsal.value,
+      sekolah_baharu: sekolahBaharu.value,
+      status: status.value,
+      tarikh: new Date().toLocaleDateString("ms-MY"),
+      timestamp: new Date().toISOString()
+    });
+
+    if (result.isOk) {
+      showToast("✅ Permohonan direkodkan");
+      closeModal();
+    }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Gagal menyimpan permohonan");
+  }
+}
+</script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Sektor Pengurusan Sekolah - PPD Kota Marudu</title>
@@ -3233,9 +3232,5 @@ function renderPertukaranMenengah() {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
   </html>
-
-
-
-
 
 
