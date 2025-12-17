@@ -3028,8 +3028,10 @@ function renderPertukaranMenengah() {
 
   modal.classList.add('active');
 
-  document.getElementById('pertukaranForm').addEventListener('submit', async e => {
-    e.preventDefault();
+ document
+    .getElementById("pertukaranForm")
+    .addEventListener("submit", simpanPertukaranMenengah);
+}
 
     const result = await window.dataSdk.create({
       type: 'pertukaran_menengah',
@@ -3044,7 +3046,40 @@ function renderPertukaranMenengah() {
     if (result.isOk) {
       showToast('✅ Permohonan direkodkan');
       closeModal();
+    }async function simpanPertukaranMenengah(e) {
+  e.preventDefault(); // ⛔ elak page reload
+
+  const namaMurid = document.getElementById("namaMurid");
+  const sekolahAsal = document.getElementById("sekolahAsal");
+  const sekolahBaharu = document.getElementById("sekolahBaharu");
+  const status = document.getElementById("status");
+
+  if (!namaMurid.value || !sekolahAsal.value || !sekolahBaharu.value) {
+    alert("Sila lengkapkan semua maklumat");
+    return;
+  }
+
+  try {
+    const result = await window.dataSdk.create({
+      type: 'pertukaran_menengah',
+      nama_murid: namaMurid.value,
+      sekolah_asal: sekolahAsal.value,
+      sekolah_baharu: sekolahBaharu.value,
+      status: status.value,
+      tarikh: new Date().toLocaleDateString('ms-MY'),
+      timestamp: new Date().toISOString()
+    });
+
+    if (result?.isOk !== false) {
+      showToast('✅ Permohonan direkodkan');
+      closeModal();
     }
+  } catch (err) {
+    console.error(err);
+    alert("❌ Gagal menyimpan permohonan");
+  }
+}
+
   });
 }
 
@@ -3186,4 +3221,5 @@ function renderPertukaranMenengah() {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
    </html>
+
 
