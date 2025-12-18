@@ -2557,6 +2557,73 @@ function renderPertukaranMenengah() {
       }
     });
 }
+async function editPertukaranMenengah(id) {
+  const item = allData.find(d => d.__backendId === id);
+
+  if (!item) {
+    alert('Rekod tidak dijumpai');
+    return;
+  }
+
+  const modal = document.getElementById('genericModal');
+  document.getElementById('modalTitle').textContent =
+    'Edit Permohonan Pertukaran Murid Menengah';
+
+  document.getElementById('modalBody').innerHTML = `
+    <form id="editPertukaranForm">
+      <div class="form-group">
+        <label class="form-label">Nama Murid</label>
+        <input class="form-input" id="editNamaMurid" value="${item.nama_murid}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sekolah Asal</label>
+        <input class="form-input" id="editSekolahAsal" value="${item.sekolah_asal}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sekolah Baharu</label>
+        <input class="form-input" id="editSekolahBaharu" value="${item.sekolah_baharu}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-input" id="editStatus">
+          <option ${item.status === 'Dalam Proses' ? 'selected' : ''}>Dalam Proses</option>
+          <option ${item.status === 'Diluluskan' ? 'selected' : ''}>Diluluskan</option>
+          <option ${item.status === 'Ditolak' ? 'selected' : ''}>Ditolak</option>
+        </select>
+      </div>
+
+      <button class="btn" type="submit">Simpan</button>
+      <button class="btn btn-delete" type="button" onclick="closeModal()">Batal</button>
+    </form>
+  `;
+
+  modal.classList.add('active');
+
+  document
+    .getElementById('editPertukaranForm')
+    .addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const result = await window.dataSdk.update({
+        __backendId: id,
+        nama_murid: document.getElementById('editNamaMurid').value.trim(),
+        sekolah_asal: document.getElementById('editSekolahAsal').value.trim(),
+        sekolah_baharu: document.getElementById('editSekolahBaharu').value.trim(),
+        status: document.getElementById('editStatus').value,
+        updatedAt: new Date()
+      });
+
+      if (result.isOk) {
+        showToast('✅ Permohonan berjaya dikemaskini');
+        closeModal();
+      } else {
+        showToast('❌ Gagal kemaskini permohonan');
+      }
+    });
+}
 
     function renderStatistik() {
       const content = document.getElementById('contentArea');
@@ -3203,6 +3270,7 @@ function renderPertukaranMenengah() {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
