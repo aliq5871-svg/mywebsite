@@ -2491,8 +2491,10 @@ function renderPertukaranMenengah() {
 }
    async function addPertukaranMenengah() {
   const modal = document.getElementById('genericModal');
-  document.getElementById('modalTitle').textContent = 'Permohonan Pertukaran Murid Menengah';
+  document.getElementById('modalTitle').textContent =
+    'Permohonan Pertukaran Murid Menengah';
 
+  // 1️⃣ Masukkan HTML borang DAHULU
   document.getElementById('modalBody').innerHTML = `
     <form id="pertukaranForm">
       <div class="form-group">
@@ -2510,15 +2512,6 @@ function renderPertukaranMenengah() {
         <input class="form-input" id="sekolahBaharu" required>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Status</label>
-        <select class="form-input" id="status">
-          <option>Dalam Proses</option>
-          <option>Diluluskan</option>
-          <option>Ditolak</option>
-        </select>
-      </div>
-
       <button class="btn" type="submit">Simpan</button>
       <button class="btn btn-delete" type="button" onclick="closeModal()">Batal</button>
     </form>
@@ -2526,27 +2519,44 @@ function renderPertukaranMenengah() {
 
   modal.classList.add('active');
 
-  document.getElementById('pertukaranForm').addEventListener('submit', async e => {
-    e.preventDefault();
+  // 2️⃣ BARU daftar event submit
+  document
+    .getElementById('pertukaranForm')
+    .addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-    const result = await window.dataSdk.create({
-      type: 'pertukaran_menengah',
-      nama_murid: namaMurid.value,
-      sekolah_asal: sekolahAsal.value,
-      sekolah_baharu: sekolahBaharu.value,
-      status: status.value,
-      tarikh: new Date().toLocaleDateString('ms-MY'),
-      timestamp: new Date().toISOString()
+      // 3️⃣ Ambil elemen dengan betul
+      const namaMurid = document.getElementById('namaMurid');
+      const sekolahAsal = document.getElementById('sekolahAsal');
+      const sekolahBaharu = document.getElementById('sekolahBaharu');
+
+      if (!namaMurid.value || !sekolahAsal.value || !sekolahBaharu.value) {
+        alert('Sila lengkapkan semua maklumat');
+        return;
+      }
+
+      // 4️⃣ Simpan ke Firebase
+      const result = await window.dataSdk.create({
+        type: 'pertukaran_menengah',
+        nama_murid: namaMurid.value.trim(),
+        sekolah_asal: sekolahAsal.value.trim(),
+        sekolah_baharu: sekolahBaharu.value.trim(),
+        status: 'Dalam Proses',
+        tarikh: new Date().toLocaleDateString('ms-MY'),
+
+        // 🔥 WAJIB untuk Firestore (orderBy)
+        createdAt: new Date()
+      });
+
+      if (result.isOk) {
+        showToast('✅ Permohonan berjaya direkodkan');
+        document.getElementById('pertukaranForm').reset();
+        closeModal();
+      } else {
+        showToast('❌ Gagal simpan permohonan');
+      }
     });
-
-    if (result.isOk) {
-      showToast('✅ Permohonan direkodkan');
-      closeModal();
-    }
-  });
 }
-
-
 
     function renderStatistik() {
       const content = document.getElementById('contentArea');
@@ -3193,6 +3203,7 @@ function renderPertukaranMenengah() {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
