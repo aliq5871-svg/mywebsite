@@ -999,6 +999,11 @@
   <span class="nav-icon">🔄</span>
   <span>Pertukaran Murid Menengah</span>
 </div>
+   <div class="nav-item" data-page="pertukaran_rendah">
+  <span class="nav-icon">🔁</span>
+  <span>Pertukaran Murid Rendah</span>
+</div>
+
    <div class="nav-item" data-page="statistik"><span class="nav-icon">📊</span> <span>Statistik</span>
    </div>
    <div class="nav-item" data-page="pekeliling"><span class="nav-icon">📋</span> <span>Pekeliling</span>
@@ -1259,6 +1264,10 @@
         case 'pertukaran_menengah':
   renderPertukaranMenengah();
   break;
+        case 'pertukaran_rendah':
+  renderPertukaranRendah();
+  break;
+
         case 'statistik':
           renderStatistik();
           break;
@@ -2638,6 +2647,98 @@ async function editPertukaranMenengah(id) {
       }
     });
 }
+function renderPertukaranRendah() {
+  const content = document.getElementById('contentArea');
+
+  const data = allData.filter(d => d.type === 'pertukaran_rendah');
+
+  content.innerHTML = `
+    <div class="card">
+      <h2 class="card-title">🔁 Pertukaran Murid Sekolah Rendah</h2>
+
+      ${isAdmin ? `<button class="btn" onclick="addPertukaranRendah()">+ Permohonan Baharu</button>` : ''}
+
+      <div class="card" style="margin-top:1rem">
+        ${
+          data.length === 0
+            ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
+            : data.map(item => `
+              <div class="grid-item" style="margin-bottom:1rem">
+                <strong>👤 ${item.nama_murid}</strong><br>
+                🎓 Tahun: ${item.tahun}<br>
+                🏫 ${item.sekolah_asal} ➜ ${item.sekolah_baharu}<br>
+                📅 ${item.tarikh}<br>
+                📌 Status: <strong>${item.status}</strong>
+              </div>
+            `).join('')
+        }
+      </div>
+    </div>
+  `;
+}
+function addPertukaranRendah() {
+  document.getElementById('modalTitle').textContent =
+    'Permohonan Pertukaran Murid Rendah';
+
+  document.getElementById('modalBody').innerHTML = `
+    <form id="pertukaranRendahForm">
+
+      <div class="form-group">
+        <label class="form-label">Nama Murid</label>
+        <input id="namaMurid" class="form-input" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tahun</label>
+        <select id="tahun" class="form-input" required>
+          <option value="">-- Pilih Tahun --</option>
+          <option>Tahun 1</option>
+          <option>Tahun 2</option>
+          <option>Tahun 3</option>
+          <option>Tahun 4</option>
+          <option>Tahun 5</option>
+          <option>Tahun 6</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sekolah Asal</label>
+        <input id="sekolahAsal" class="form-input" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sekolah Baharu</label>
+        <input id="sekolahBaharu" class="form-input" required>
+      </div>
+
+      <button class="btn" type="submit">Simpan</button>
+      <button type="button" class="btn btn-delete" onclick="closeModal()">Batal</button>
+
+    </form>
+  `;
+
+  document.getElementById('genericModal').classList.add('active');
+
+  document.getElementById('pertukaranRendahForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const result = await window.dataSdk.create({
+      type: 'pertukaran_rendah',
+      nama_murid: namaMurid.value,
+      tahun: tahun.value,
+      sekolah_asal: sekolahAsal.value,
+      sekolah_baharu: sekolahBaharu.value,
+      status: 'Dalam Proses',
+      tarikh: new Date().toLocaleDateString('ms-MY'),
+      timestamp: new Date().toISOString()
+    });
+
+    if (result.isOk) {
+      showToast('✅ Permohonan berjaya direkodkan');
+      closeModal();
+    }
+  });
+}
 
     function renderStatistik() {
       const content = document.getElementById('contentArea');
@@ -3284,6 +3385,7 @@ async function editPertukaranMenengah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
