@@ -2652,17 +2652,50 @@ function renderPertukaranRendah() {
 
   const data = allData.filter(d => d.type === 'pertukaran_rendah');
 
+  // ===== Statistik =====
+  const jumlah = data.length;
+  const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
+  const diluluskan = data.filter(d => d.status === 'Diluluskan').length;
+  const ditolak = data.filter(d => d.status === 'Ditolak').length;
+
   content.innerHTML = `
     <div class="card">
-      <h2 class="card-title">🔁 Pertukaran Murid Sekolah Rendah</h2>
+      <h2 class="card-title">🔁 Dashboard Pertukaran Murid Rendah</h2>
 
       ${isAdmin ? `<button class="btn" onclick="addPertukaranRendah()">+ Permohonan Baharu</button>` : ''}
 
-      <div class="card" style="margin-top:1rem">
-        ${
-          data.length === 0
-            ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
-            : data.map(item => `
+      <!-- STATISTIK -->
+      <div class="grid" style="margin-top:1.5rem">
+        <div class="grid-item" style="border-left:4px solid #0d6efd;text-align:center">
+          <h3>${jumlah}</h3>
+          <p>Jumlah Permohonan</p>
+        </div>
+
+        <div class="grid-item" style="border-left:4px solid #ffc107;text-align:center">
+          <h3>${dalamProses}</h3>
+          <p>Dalam Proses</p>
+        </div>
+
+        <div class="grid-item" style="border-left:4px solid #198754;text-align:center">
+          <h3>${diluluskan}</h3>
+          <p>Diluluskan</p>
+        </div>
+
+        <div class="grid-item" style="border-left:4px solid #dc3545;text-align:center">
+          <h3>${ditolak}</h3>
+          <p>Ditolak</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENARAI PERMOHONAN -->
+    <div class="card">
+      <h2 class="card-title">📄 Senarai Permohonan</h2>
+
+      ${
+        data.length === 0
+          ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
+          : data.map(item => `
               <div class="grid-item" style="margin-bottom:1rem">
                 <strong>👤 ${item.nama_murid}</strong><br>
                 🎓 Tahun: ${item.tahun}<br>
@@ -2671,11 +2704,11 @@ function renderPertukaranRendah() {
                 📌 Status: <strong>${item.status}</strong>
               </div>
             `).join('')
-        }
-      </div>
+      }
     </div>
   `;
 }
+
 function addPertukaranRendah() {
   document.getElementById('modalTitle').textContent =
     'Permohonan Pertukaran Murid Rendah';
@@ -3385,6 +3418,7 @@ function addPertukaranRendah() {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
