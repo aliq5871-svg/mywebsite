@@ -961,22 +961,6 @@
     body.dark-mode .hero-description {
       color: #aaa;
     }
-   /* ===== Scroll Senarai Permohonan ===== */
-.scroll-container {
-  height: 320px;              /* tinggi paparan */
-  overflow: hidden;
-  position: relative;
-}
-
-.scroll-content {
-  position: absolute;
-  width: 100%;
-}
-
-.scroll-item {
-  margin-bottom: 1rem;
-}
-
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
@@ -2482,35 +2466,7 @@ function renderPertukaranMenengah() {
     </div>
 
     <div class="card">
-  <h2 class="card-title">📄 Senarai Permohonan (Auto Scroll)</h2>
-
-  ${data.length === 0
-    ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
-    : `
-    <div class="scroll-container">
-      <div id="scrollPermohonan" class="scroll-content">
-        ${data.map(item => `
-          <div class="grid-item scroll-item">
-            <strong>👤 ${item.nama_murid}</strong><br>
-            🎓 Tingkatan: <strong>${item.tingkatan}</strong><br>
-            🏫 ${item.sekolah_asal} ➜ ${item.sekolah_baharu}<br>
-            📅 ${item.tarikh}<br>
-            📌 Status: <strong>${item.status}</strong>
-
-            ${isAdmin ? `
-              <div style="margin-top:0.5rem">
-                <button class="btn btn-small"
-                  onclick="editPertukaranMenengah('${item.__backendId}')">✏️ Edit</button>
-                <button class="btn btn-delete btn-small"
-                  onclick="deleteItem('${item.__backendId}')">Padam</button>
-              </div>
-            ` : ''}
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `}
-</div>
+      <h2 class="card-title">📄 Senarai Permohonan</h2>
 
       ${data.length === 0
         ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
@@ -2534,28 +2490,6 @@ function renderPertukaranMenengah() {
     </div>
   `;
 }
-   function startAutoScroll() {
-  const container = document.querySelector('.scroll-container');
-  const content = document.getElementById('scrollPermohonan');
-
-  if (!container || !content) return;
-
-  let pos = container.offsetHeight;
-
-  function scrollUp() {
-    pos -= 0.3; // ⬅️ kawal kelajuan (0.2 perlahan, 1 laju)
-    content.style.transform = `translateY(${pos}px)`;
-
-    if (Math.abs(pos) > content.offsetHeight) {
-      pos = container.offsetHeight;
-    }
-    requestAnimationFrame(scrollUp);
-  }
-
-  scrollUp();
-}
-setTimeout(startAutoScroll, 300);
-
    async function addPertukaranMenengah() {
   const modal = document.getElementById('genericModal');
   document.getElementById('modalTitle').textContent =
@@ -3350,8 +3284,6 @@ async function editPertukaranMenengah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
-
-
 
 
 
