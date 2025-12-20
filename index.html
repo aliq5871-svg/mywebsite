@@ -17,7 +17,23 @@
 
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
+ function updateStatusPegawai(id, statusBaharu) {
+  const pegawai = allData.find(d => d.__backendId === id);
+  if (!pegawai) return;
 
+  pegawai.status_keberadaan = statusBaharu;
+  pegawai.updatedAt = new Date();
+
+  window.dataSdk.update(pegawai)
+    .then(() => {
+      renderPegawai();
+      showToast?.('✅ Status pegawai dikemaskini');
+    })
+    .catch(err => {
+      console.error(err);
+      alert('❌ Gagal kemaskini status');
+    });
+}
   window.dataSdk = {
     init(handler) {
       db.collection("sps_data")
@@ -1087,6 +1103,61 @@
     height: 16px;
   }
 }
+/* Avatar */
+.avatar {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #007bff, #00bfff);
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+/* Status Badge */
+.status-badge {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 20px;
+  color: #fff;
+}
+
+/* Warna status */
+.status-hadir { background: #16a34a; }
+.status-cuti { background: #dc2626; }
+.status-kursus { background: #2563eb; }
+.status-bengkel { background: #f97316; }
+.status-keluar { background: #6b7280; }
+.status-select {
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:4px 10px;
+  border-radius:20px;
+  border:none;
+  font-size:0.75rem;
+  font-weight:600;
+  color:#fff;
+  cursor:pointer;
+}
+
+.status-select option {
+  color:#000;
+}
+
+.status-select.status-hadir { background:#16a34a; }
+.status-select.status-cuti { background:#dc2626; }
+.status-select.status-kursus { background:#2563eb; }
+.status-select.status-bengkel { background:#f97316; }
+.status-select.status-keluar { background:#6b7280; }
 
 
   </style>
@@ -1492,7 +1563,7 @@
 
    function renderProfil() {
   const content = document.getElementById('contentArea');
-
+const profile = allData.find(d => d.type === 'profile') || {};
   content.innerHTML = `
     <!-- ================= PROFIL SEKTOR ================= -->
     <div class="card">
@@ -1579,6 +1650,28 @@
 
       </div>
     </div>
+      <div class="card">
+          <h2 class="card-title">📞 Maklumat Perhubungan</h2>
+          <div style="line-height: 2; color: #555;">
+            <div style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.05) 0%, rgba(0, 191, 255, 0.02) 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #007bff; margin-bottom: 1.5rem;">
+              <p style="margin-bottom: 0.8rem;"><strong style="color: #007bff;">📍 Alamat</strong></p>
+              <p style="margin: 0; line-height: 1.8;">${profile && profile.address ? profile.address : 'Pejabat Pendidikan Daerah Kota Marudu<br>Peti Surat 89108<br>89108 Kota Marudu, Sabah'}</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.05) 0%, rgba(0, 191, 255, 0.02) 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #007bff; margin-bottom: 1.5rem;">
+              <p style="margin-bottom: 0.8rem;"><strong style="color: #007bff;">📞 Telefon:</strong> 088-661234 / 088-662511</p>
+              <p style="margin-bottom: 0.8rem;"><strong style="color: #007bff;">📠 Faks:</strong> 088-662511</p>
+              <p><strong style="color: #007bff;">📧 Email:</strong> ppdkotamarudu@moe.gov.my</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.05) 0%, rgba(0, 191, 255, 0.02) 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid #007bff;">
+              <p style="margin-bottom: 0.8rem;"><strong style="color: #007bff;">🕐 Waktu Operasi</strong></p>
+              <p style="margin-bottom: 0.5rem;">Isnin - Khamis: 8:00 AM - 5:00 PM</p>
+              <p style="margin-bottom: 0.5rem;">Jumaat: 8:00 AM - 12:15 PM, 2:45 PM - 5:00 PM</p>
+              <p style="color: #999; font-size: 0.9rem; margin-top: 0.8rem;">* Tutup pada hujung minggu dan cuti umum</p>
+            </div>
+          </div>
+        </div>
   `;
 }
 
@@ -1818,42 +1911,73 @@
     }
 
     function renderPegawai() {
-      const content = document.getElementById('contentArea');
-      const pegawai = allData.filter(d => d.type === 'officer');
-      
-      content.innerHTML = `
-        <div class="card">
-          <h2 class="card-title">👥 Pegawai</h2>
-          ${isAdmin ? '<button class="btn" onclick="addOfficer()">+ Tambah Pegawai</button>' : ''}
-          
-          <div class="grid">
-            ${pegawai.length === 0 ? 
-              '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">Tiada maklumat pegawai</p>' :
-              pegawai.map(officer => `
-                <div class="grid-item" style="text-align: center;">
-                  ${officer.image_url ? 
-                    `<img src="${officer.image_url}" alt="${officer.name}" class="officer-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #007bff 0%, #00bfff 100%); border-radius: 50%; margin: 0 auto 1rem; display: none; align-items: center; justify-content: center; font-size: 3rem;">👤</div>` :
-                    `<div style="width: 100px; height: 100px; background: linear-gradient(135deg, #007bff 0%, #00bfff 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 3rem;">👤</div>`
-                  }
-                  <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.2rem;">${officer.name}</h3>
-                  <p style="font-weight: 600; margin-bottom: 0.5rem; color: #666;">${officer.position}</p>
-                  ${officer.unit ? `<p style="font-size: 0.9rem; color: #007bff; margin-bottom: 0.5rem;">🏢 ${officer.unit}</p>` : ''}
-                  ${officer.email ? `<p style="font-size: 0.9rem; color: #999;">📧 ${officer.email}</p>` : ''}
-                  ${officer.phone ? `<p style="font-size: 0.9rem; color: #999;">📞 ${officer.phone}</p>` : ''}
+  const content = document.getElementById('contentArea');
+  const pegawai = allData.filter(d => d.type === 'officer');
+
+  content.innerHTML = `
+    <div class="card">
+      <h2 class="card-title">👥 Pegawai</h2>
+      ${isAdmin ? '<button class="btn" onclick="addOfficer()">+ Tambah Pegawai</button>' : ''}
+
+      <div class="grid">
+        ${pegawai.length === 0
+          ? '<p style="grid-column:1/-1;text-align:center;color:#999;padding:2rem;">Tiada maklumat pegawai</p>'
+          : pegawai.map(officer => {
+              const status = officer.status_keberadaan || 'hadir';
+
+              return `
+                <div class="grid-item" style="text-align:center; position:relative;">
+
+                  <!-- 🔵 STATUS KEBERADAAN -->
                   ${isAdmin ? `
-                    <div style="margin-top: 1rem;">
+  <select class="status-select status-${status}"
+    onchange="updateStatusPegawai('${officer.__backendId}', this.value)">
+    <option value="hadir" ${status==='hadir'?'selected':''}>🟢 Hadir</option>
+    <option value="cuti" ${status==='cuti'?'selected':''}>🔴 Cuti</option>
+    <option value="kursus" ${status==='kursus'?'selected':''}>🔵 Kursus</option>
+    <option value="bengkel" ${status==='bengkel'?'selected':''}>🟠 Bengkel</option>
+    <option value="keluar" ${status==='keluar'?'selected':''}>⚪ Keluar</option>
+  </select>
+` : `
+  <div class="status-badge status-${status}">
+    ${
+      status === 'hadir' ? '🟢 Hadir' :
+      status === 'cuti' ? '🔴 Cuti' :
+      status === 'kursus' ? '🔵 Kursus' :
+      status === 'bengkel' ? '🟠 Bengkel' :
+      '⚪ Keluar'
+    }
+  </div>
+`}
+
+                  ${officer.image_url
+                    ? `<img src="${officer.image_url}" class="officer-img"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="avatar" style="display:none;">👤</div>`
+                    : `<div class="avatar">👤</div>`
+                  }
+
+                  <h3 style="color:#007bff;margin-bottom:0.4rem;">${officer.name}</h3>
+                  <p style="font-weight:600;color:#666;">${officer.position}</p>
+
+                  ${officer.unit ? `<p style="font-size:0.9rem;color:#007bff;">🏢 ${officer.unit}</p>` : ''}
+                  ${officer.email ? `<p style="font-size:0.9rem;color:#999;">📧 ${officer.email}</p>` : ''}
+                  ${officer.phone ? `<p style="font-size:0.9rem;color:#999;">📞 ${officer.phone}</p>` : ''}
+
+                  ${isAdmin ? `
+                    <div style="margin-top:1rem;">
                       <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
                       <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
                     </div>
                   ` : ''}
                 </div>
-              `).join('')
-            }
-          </div>
-        </div>
-      `;
-    }
+              `;
+            }).join('')
+        }
+      </div>
+    </div>
+  `;
+}
 
     function renderBerita() {
       const content = document.getElementById('contentArea');
@@ -3615,6 +3739,12 @@ async function editPertukaranRendah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
+
+
+
+
+
 
 
 
