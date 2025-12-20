@@ -1198,12 +1198,6 @@
    </div>
   </div>
   <script>
-   function updateOfficerStatus(id, status) {
-  window.dataSdk.update({
-    __backendId: id,
-    status_keberadaan: status
-  });
-}
     let allData = [];
     let currentPage = 'utama';
     let isAdmin = false;
@@ -1889,62 +1883,61 @@ const profile = allData.find(d => d.type === 'profile') || {};
         ${
           pegawai.length === 0
             ? '<p style="grid-column:1/-1;text-align:center;color:#999;padding:2rem;">Tiada maklumat pegawai</p>'
-            pegawai.map(officer => {
-  const status = officer.status_keberadaan || 'hadir';
+            : pegawai.map(officer => {
+                const status = officer.status_keberadaan || 'hadir';
 
-  return `
-    <div class="grid-item" style="text-align: center;">
+                return `
+                  <div class="grid-item" style="text-align:center;">
 
-      <!-- 🔵 STATUS PEGAWAI -->
-      <div class="status-badge status-${status}">
-        ${
-          status === 'hadir' ? '🟢 Hadir' :
-          status === 'cuti' ? '🔴 Cuti' :
-          status === 'bengkel' ? '🟠 Bengkel' :
-          status === 'kursus' ? '🔵 Kursus' :
-          '⚪ Keluar Pejabat'
+                    <div class="status-badge status-${status}">
+                      ${
+                        status === 'hadir' ? '🟢 Hadir' :
+                        status === 'cuti' ? '🔴 Cuti' :
+                        status === 'bengkel' ? '🟠 Bengkel' :
+                        status === 'kursus' ? '🔵 Kursus' :
+                        '⚪ Keluar Pejabat'
+                      }
+                    </div>
+
+                    ${isAdmin ? `
+                      <select style="margin:8px 0;padding:4px;"
+                        onchange="updateOfficerStatus('${officer.__backendId}', this.value)">
+                        <option value="hadir" ${status==='hadir'?'selected':''}>Hadir</option>
+                        <option value="cuti" ${status==='cuti'?'selected':''}>Cuti</option>
+                        <option value="bengkel" ${status==='bengkel'?'selected':''}>Bengkel</option>
+                        <option value="kursus" ${status==='kursus'?'selected':''}>Kursus</option>
+                        <option value="keluar" ${status==='keluar'?'selected':''}>Keluar Pejabat</option>
+                      </select>
+                    ` : ''}
+
+                    ${officer.image_url
+                      ? `<img src="${officer.image_url}" class="officer-img"
+                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                         <div style="width:100px;height:100px;background:#0d6efd;border-radius:50%;margin:0 auto 1rem;display:none;align-items:center;justify-content:center;font-size:3rem;">👤</div>`
+                      : `<div style="width:100px;height:100px;background:#0d6efd;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:3rem;">👤</div>`
+                    }
+
+                    <h3 style="color:#007bff;">${officer.name}</h3>
+                    <p style="font-weight:600;color:#666;">${officer.position}</p>
+
+                    ${officer.unit ? `<p style="font-size:.9rem;color:#007bff;">🏢 ${officer.unit}</p>` : ''}
+                    ${officer.email ? `<p style="font-size:.9rem;color:#999;">📧 ${officer.email}</p>` : ''}
+                    ${officer.phone ? `<p style="font-size:.9rem;color:#999;">📞 ${officer.phone}</p>` : ''}
+
+                    ${isAdmin ? `
+                      <div style="margin-top:1rem;">
+                        <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
+                        <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')
         }
       </div>
-
-      <!-- GAMBAR / AVATAR -->
-      ${officer.image_url ? 
-        `<img src="${officer.image_url}" class="officer-img">` :
-        `<div class="avatar">👤</div>`
-      }
-
-      <h3 style="color:#007bff;">${officer.name}</h3>
-      <p>${officer.position}</p>
-
-      ${officer.unit ? `<p>🏢 ${officer.unit}</p>` : ''}
-      ${officer.email ? `<p>📧 ${officer.email}</p>` : ''}
-      ${officer.phone ? `<p>📞 ${officer.phone}</p>` : ''}
-
-      <!-- 🔽 SELECT TUKAR STATUS (ADMIN SAHAJA) -->
-      ${isAdmin ? `
-        <select 
-          style="margin-top:8px; padding:4px;"
-          onchange="updateOfficerStatus('${officer.__backendId}', this.value)">
-          
-          <option value="hadir" ${status==='hadir'?'selected':''}>Hadir</option>
-          <option value="cuti" ${status==='cuti'?'selected':''}>Cuti</option>
-          <option value="bengkel" ${status==='bengkel'?'selected':''}>Bengkel</option>
-          <option value="kursus" ${status==='kursus'?'selected':''}>Kursus</option>
-          <option value="keluar" ${status==='keluar'?'selected':''}>Keluar Pejabat</option>
-        </select>
-      ` : ''}
-
-      <!-- BUTANG EDIT / PADAM -->
-      ${isAdmin ? `
-        <div style="margin-top:1rem;">
-          <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
-          <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
-        </div>
-      ` : ''}
-
     </div>
-
- `;
-   
+  `;
+}
     function renderBukuPelawat() {
       const content = document.getElementById('contentArea');
       const messages = allData.filter(d => d.type === 'guestbook');
@@ -3649,9 +3642,6 @@ async function editPertukaranRendah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
-
-
-
 
 
 
