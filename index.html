@@ -1872,83 +1872,62 @@ const profile = allData.find(d => d.type === 'profile') || {};
     }
 
     function renderPegawai() {
-      const content = document.getElementById('contentArea');
-      const pegawai = allData.filter(d => d.type === 'officer');
-      
-      content.innerHTML = `
-        <div class="card">
-          <h2 class="card-title">👥 Pegawai</h2>
-          ${isAdmin ? '<button class="btn" onclick="addOfficer()">+ Tambah Pegawai</button>' : ''}
-          
-          <div class="grid">
-            ${pegawai.length === 0 ? 
-              '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">Tiada maklumat pegawai</p>' :
-              pegawai.map(officer => `
-                <div class="grid-item" style="text-align: center;">
-                pegawai.map(officer => {
-  const status = officer.status_keberadaan || 'hadir';
+  const content = document.getElementById('contentArea');
+  const pegawai = allData.filter(d => d.type === 'officer');
 
-  return `
-    <div class="grid-item" style="text-align: center; position: relative;">
+  content.innerHTML = `
+    <div class="card">
+      <h2 class="card-title">👥 Pegawai</h2>
+      ${isAdmin ? '<button class="btn" onclick="addOfficer()">+ Tambah Pegawai</button>' : ''}
 
-      <!-- 🔵 STATUS KEBERADAAN -->
-      <div class="status-badge status-${status}">
-        ${
-          status === 'hadir' ? '🟢 Hadir' :
-          status === 'cuti' ? '🔴 Cuti' :
-          status === 'kursus' ? '🔵 Kursus' :
-          status === 'bengkel' ? '🟠 Bengkel' :
-          '⚪ Keluar'
-        }
-      </div>
+      <div class="grid">
+        ${pegawai.length === 0
+          ? '<p style="grid-column:1/-1;text-align:center;color:#999;padding:2rem;">Tiada maklumat pegawai</p>'
+          : pegawai.map(officer => {
+              const status = officer.status_keberadaan || 'hadir';
 
-      ${officer.image_url ? 
-        `<img src="${officer.image_url}" alt="${officer.name}" class="officer-img"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="avatar">👤</div>` :
-        `<div class="avatar">👤</div>`
-      }
+              return `
+                <div class="grid-item" style="text-align:center; position:relative;">
 
-      <h3 style="color:#007bff; margin-bottom:0.5rem;">${officer.name}</h3>
-      <p style="font-weight:600; color:#666;">${officer.position}</p>
+                  <!-- 🔵 STATUS KEBERADAAN -->
+                  <div class="status-badge status-${status}">
+                    ${
+                      status === 'hadir' ? '🟢 Hadir' :
+                      status === 'cuti' ? '🔴 Cuti' :
+                      status === 'kursus' ? '🔵 Kursus' :
+                      status === 'bengkel' ? '🟠 Bengkel' :
+                      '⚪ Keluar'
+                    }
+                  </div>
 
-      ${officer.unit ? `<p style="font-size:0.9rem; color:#007bff;">🏢 ${officer.unit}</p>` : ''}
-      ${officer.email ? `<p style="font-size:0.9rem; color:#999;">📧 ${officer.email}</p>` : ''}
-      ${officer.phone ? `<p style="font-size:0.9rem; color:#999;">📞 ${officer.phone}</p>` : ''}
-
-      ${isAdmin ? `
-        <div style="margin-top:1rem;">
-          <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
-          <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
-        </div>
-      ` : ''}
-    </div>
-  `;
-}).join('')
-
-                  ${officer.image_url ? 
-                    `<img src="${officer.image_url}" alt="${officer.name}" class="officer-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #007bff 0%, #00bfff 100%); border-radius: 50%; margin: 0 auto 1rem; display: none; align-items: center; justify-content: center; font-size: 3rem;">👤</div>` :
-                    `<div style="width: 100px; height: 100px; background: linear-gradient(135deg, #007bff 0%, #00bfff 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 3rem;">👤</div>`
+                  ${officer.image_url
+                    ? `<img src="${officer.image_url}" class="officer-img"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="avatar" style="display:none;">👤</div>`
+                    : `<div class="avatar">👤</div>`
                   }
-                  <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.2rem;">${officer.name}</h3>
-                  <p style="font-weight: 600; margin-bottom: 0.5rem; color: #666;">${officer.position}</p>
-                  ${officer.unit ? `<p style="font-size: 0.9rem; color: #007bff; margin-bottom: 0.5rem;">🏢 ${officer.unit}</p>` : ''}
-                  ${officer.email ? `<p style="font-size: 0.9rem; color: #999;">📧 ${officer.email}</p>` : ''}
-                  ${officer.phone ? `<p style="font-size: 0.9rem; color: #999;">📞 ${officer.phone}</p>` : ''}
+
+                  <h3 style="color:#007bff;margin-bottom:0.4rem;">${officer.name}</h3>
+                  <p style="font-weight:600;color:#666;">${officer.position}</p>
+
+                  ${officer.unit ? `<p style="font-size:0.9rem;color:#007bff;">🏢 ${officer.unit}</p>` : ''}
+                  ${officer.email ? `<p style="font-size:0.9rem;color:#999;">📧 ${officer.email}</p>` : ''}
+                  ${officer.phone ? `<p style="font-size:0.9rem;color:#999;">📞 ${officer.phone}</p>` : ''}
+
                   ${isAdmin ? `
-                    <div style="margin-top: 1rem;">
+                    <div style="margin-top:1rem;">
                       <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
                       <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
                     </div>
                   ` : ''}
                 </div>
-              `).join('')
-            }
-          </div>
-        </div>
-      `;
-    }
+              `;
+            }).join('')
+        }
+      </div>
+    </div>
+  `;
+}
 
     function renderBerita() {
       const content = document.getElementById('contentArea');
@@ -3710,6 +3689,7 @@ async function editPertukaranRendah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
