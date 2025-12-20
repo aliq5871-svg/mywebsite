@@ -1086,9 +1086,40 @@
   .org-line {
     height: 16px;
   }
+/* ===== Status Keberadaan Pegawai ===== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
+.status-hadir {
+  background: #16a34a;
+  color: #fff;
+}
 
+.status-cuti {
+  background: #dc2626;
+  color: #fff;
+}
+
+.status-bengkel {
+  background: #f59e0b;
+  color: #fff;
+}
+
+.status-kursus {
+  background: #2563eb;
+  color: #fff;
+}
+
+.status-keluar {
+  background: #6b7280;
+  color: #fff;
+}
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
@@ -1840,99 +1871,73 @@ const profile = allData.find(d => d.type === 'profile') || {};
     }
 
     function renderPegawai() {
-      const content = document.getElementById('contentArea');
-      const pegawai = allData.filter(d => d.type === 'officer');
-      
-      content.innerHTML = `
-        <div class="card">
-          <h2 class="card-title">👥 Pegawai</h2>
-          ${isAdmin ? '<button class="btn" onclick="addOfficer()">+ Tambah Pegawai</button>' : ''}
-          
-          <div class="grid">
-            ${pegawai.length === 0 ? 
-              '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">Tiada maklumat pegawai</p>' :
-              pegawai.map(officer => `
-                <div class="grid-item" style="text-align: center;">
-                  ${officer.image_url ? 
-                    `<img src="${officer.image_url}" alt="${officer.name}" class="officer-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #007bff 0%, #00bfff 100%); border-radius: 50%; margin: 0 auto 1rem; display: none; align-items: center; justify-content: center; font-size: 3rem;">👤</div>` :
-                    `<div style="width: 100px; height: 100px; background: linear-gradient(135deg, #007bff 0%, #00bfff 100%); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 3rem;">👤</div>`
-                  }
-                  <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.2rem;">${officer.name}</h3>
-                  <p style="font-weight: 600; margin-bottom: 0.5rem; color: #666;">${officer.position}</p>
-                  ${officer.unit ? `<p style="font-size: 0.9rem; color: #007bff; margin-bottom: 0.5rem;">🏢 ${officer.unit}</p>` : ''}
-                  ${officer.email ? `<p style="font-size: 0.9rem; color: #999;">📧 ${officer.email}</p>` : ''}
-                  ${officer.phone ? `<p style="font-size: 0.9rem; color: #999;">📞 ${officer.phone}</p>` : ''}
-                  ${isAdmin ? `
-                    <div style="margin-top: 1rem;">
-                      <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
-                      <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
-                    </div>
-                  ` : ''}
-                </div>
-              `).join('')
-            }
-          </div>
-        </div>
-      `;
-    }
+  const content = document.getElementById('contentArea');
+  const pegawai = allData.filter(d => d.type === 'officer');
 
-    function renderBerita() {
-      const content = document.getElementById('contentArea');
-      const berita = allData.filter(d => d.type === 'news');
-      
-      content.innerHTML = `
-        <div class="card">
-          <h2 class="card-title">📰 Berita & Aktiviti</h2>
-          ${isAdmin ? '<button class="btn" onclick="addNews()">+ Tambah Berita</button>' : ''}
-          
-          <div class="grid">
-            ${berita.length === 0 ? 
-              '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">Tiada berita</p>' :
-              berita.map(news => {
-                const likes = news.likes || 0;
-                const views = news.views || 0;
-                const commentCount = allData.filter(d => d.type === 'interaction' && d.parent_id === news.__backendId && d.interaction_type === 'comment').length;
-                
+  content.innerHTML = `
+    <div class="card">
+      <h2 class="card-title">👥 Pegawai</h2>
+      ${isAdmin ? '<button class="btn" onclick="addOfficer()">+ Tambah Pegawai</button>' : ''}
+
+      <div class="grid">
+        ${
+          pegawai.length === 0
+            ? '<p style="grid-column:1/-1;text-align:center;color:#999;padding:2rem;">Tiada maklumat pegawai</p>'
+            : pegawai.map(officer => {
+                const status = officer.status_keberadaan || 'hadir';
+
                 return `
-                <div class="grid-item">
-                ${news.image_url ? `
-  <img src="${news.image_url}"
-       style="width:100%; height:180px; object-fit:cover; border-radius:12px; margin-bottom:0.8rem;"
-       onerror="this.style.display='none'">
-` : ''}
+                  <div class="grid-item" style="text-align:center;">
 
-                  <p style="font-size: 0.85rem; color: #007bff; font-weight: 600; margin-bottom: 0.5rem;">${news.date || ''}</p>
-                  <h3 style="color: #333; margin-bottom: 0.8rem; font-size: 1.2rem;">${news.title}</h3>
-                  <p style="line-height: 1.6; color: #666;">${news.description || ''}</p>
-                  ${news.download_link ? `<p style="font-size: 0.9rem; color: #28a745; margin-top: 0.5rem;">🔗 <a href="${news.download_link}" target="_blank" rel="noopener noreferrer" style="color: #28a745; text-decoration: underline;">Muat Turun Lampiran</a></p>` : ''}
-                  
-                  <div class="interaction-buttons">
-                    <button class="btn btn-small btn-like" onclick="toggleLike('${news.__backendId}')">
-                      ❤️ Suka (${likes})
-                    </button>
-                    <button class="btn btn-small btn-view" onclick="viewItem('${news.__backendId}')">
-                      👁️ Lihat (${views})
-                    </button>
-                    <button class="btn btn-small btn-comment" onclick="showComments('${news.__backendId}', 'news')">
-                       💬 Komen (${commentCount})
-                    </button>
-                  </div>
-                  ${isAdmin ? `
-                    <div style="margin-top: 0.5rem;">
-                      <button class="btn btn-small" onclick="editNews('${news.__backendId}')">✏️ Edit</button>
-                      <button class="btn btn-delete btn-small" onclick="deleteItem('${news.__backendId}')">Padam</button>
+                    <div class="status-badge status-${status}">
+                      ${
+                        status === 'hadir' ? '🟢 Hadir' :
+                        status === 'cuti' ? '🔴 Cuti' :
+                        status === 'bengkel' ? '🟠 Bengkel' :
+                        status === 'kursus' ? '🔵 Kursus' :
+                        '⚪ Keluar Pejabat'
+                      }
                     </div>
-                  ` : ''}
-                </div>
-              `;
-              }).join('')
-            }
-          </div>
-        </div>
-      `;
-    }
 
+                    ${isAdmin ? `
+                      <select style="margin:8px 0;padding:4px;"
+                        onchange="updateOfficerStatus('${officer.__backendId}', this.value)">
+                        <option value="hadir" ${status==='hadir'?'selected':''}>Hadir</option>
+                        <option value="cuti" ${status==='cuti'?'selected':''}>Cuti</option>
+                        <option value="bengkel" ${status==='bengkel'?'selected':''}>Bengkel</option>
+                        <option value="kursus" ${status==='kursus'?'selected':''}>Kursus</option>
+                        <option value="keluar" ${status==='keluar'?'selected':''}>Keluar Pejabat</option>
+                      </select>
+                    ` : ''}
+
+                    ${officer.image_url
+                      ? `<img src="${officer.image_url}" class="officer-img"
+                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                         <div style="width:100px;height:100px;background:#0d6efd;border-radius:50%;margin:0 auto 1rem;display:none;align-items:center;justify-content:center;font-size:3rem;">👤</div>`
+                      : `<div style="width:100px;height:100px;background:#0d6efd;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:3rem;">👤</div>`
+                    }
+
+                    <h3 style="color:#007bff;">${officer.name}</h3>
+                    <p style="font-weight:600;color:#666;">${officer.position}</p>
+
+                    ${officer.unit ? `<p style="font-size:.9rem;color:#007bff;">🏢 ${officer.unit}</p>` : ''}
+                    ${officer.email ? `<p style="font-size:.9rem;color:#999;">📧 ${officer.email}</p>` : ''}
+                    ${officer.phone ? `<p style="font-size:.9rem;color:#999;">📞 ${officer.phone}</p>` : ''}
+
+                    ${isAdmin ? `
+                      <div style="margin-top:1rem;">
+                        <button class="btn btn-small" onclick="editOfficer('${officer.__backendId}')">✏️ Edit</button>
+                        <button class="btn btn-delete btn-small" onclick="deleteItem('${officer.__backendId}')">Padam</button>
+                      </div>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')
+        }
+      </div>
+    </div>
+  `;
+}
     function renderBukuPelawat() {
       const content = document.getElementById('contentArea');
       const messages = allData.filter(d => d.type === 'guestbook');
@@ -3637,6 +3642,7 @@ async function editPertukaranRendah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
