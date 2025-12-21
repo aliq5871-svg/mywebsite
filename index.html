@@ -6,6 +6,66 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
 <script>
+ function kiraBulanan(data, type) {
+  const bulan = Array(12).fill(0);
+
+  data
+    .filter(d => d.type === type)
+    .forEach(d => {
+      const tarikh = d.createdAt?.toDate
+        ? d.createdAt.toDate()
+        : new Date(d.timestamp || d.tarikh);
+      const m = tarikh.getMonth(); // 0-11
+      bulan[m]++;
+    });
+
+  return bulan;
+}
+let grafPertukaranChart;
+
+function renderGrafPertukaran() {
+  const ctx = document.getElementById('grafPertukaran');
+  if (!ctx) return;
+
+  const labelBulan = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogos','Sep','Okt','Nov','Dis'];
+
+  const dataMenengah = kiraBulanan(allData, 'pertukaran_menengah');
+  const dataRendah = kiraBulanan(allData, 'pertukaran_rendah');
+
+  if (grafPertukaranChart) grafPertukaranChart.destroy();
+
+  grafPertukaranChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labelBulan,
+      datasets: [
+        {
+          label: 'Menengah',
+          data: dataMenengah,
+          backgroundColor: '#2563eb'
+        },
+        {
+          label: 'Rendah',
+          data: dataRendah,
+          backgroundColor: '#16a34a'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { precision: 0 }
+        }
+      }
+    }
+  });
+}
+
  const firebaseConfig = {
   apiKey: "AIzaSyBfDXjt_-6cBG1wzhr5MUJz29VLGx_oTcc",
   authDomain: "portal-sps-ppd-kota-marudu.firebaseapp.com",
@@ -2681,6 +2741,10 @@ function renderPertukaranMenengah() {
   const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
 
   content.innerHTML = `
+  <div class="card">
+  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
+  <canvas id="grafPertukaran" height="120"></canvas>
+</div>
     <div class="card">
       <h2 class="card-title">🔄 Dashboard Pertukaran Murid Menengah</h2>
 
@@ -2732,6 +2796,7 @@ function renderPertukaranMenengah() {
         `).join('')
       }
     </div>
+    setTimeout(renderGrafPertukaran, 0);
   `;
 }
    async function addPertukaranMenengah() {
@@ -3761,8 +3826,11 @@ async function editPertukaranRendah(id) {
 
     window.onload = init;
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
 </html> 
+
 
 
 
