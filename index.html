@@ -21,50 +21,65 @@
 
   return bulan;
 }
-let grafPertukaranChart;
+let grafMenengahChart;
 
-function renderGrafPertukaran() {
-  const ctx = document.getElementById('grafPertukaran');
+function renderGrafMenengah() {
+  const ctx = document.getElementById('grafMenengah');
   if (!ctx) return;
 
-  const labelBulan = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogos','Sep','Okt','Nov','Dis'];
+  const data = kiraBulanan(allData, 'pertukaran_menengah');
+  const bulan = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogos','Sep','Okt','Nov','Dis'];
 
-  const dataMenengah = kiraBulanan(allData, 'pertukaran_menengah');
-  const dataRendah = kiraBulanan(allData, 'pertukaran_rendah');
+  if (grafMenengahChart) grafMenengahChart.destroy();
 
-  if (grafPertukaranChart) grafPertukaranChart.destroy();
-
-  grafPertukaranChart = new Chart(ctx, {
+  grafMenengahChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: labelBulan,
-      datasets: [
-        {
-          label: 'Menengah',
-          data: dataMenengah,
-          backgroundColor: '#2563eb'
-        },
-        {
-          label: 'Rendah',
-          data: dataRendah,
-          backgroundColor: '#16a34a'
-        }
-      ]
+      labels: bulan,
+      datasets: [{
+        label: 'Pertukaran Menengah',
+        data: data
+      }]
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { position: 'top' }
-      },
+      plugins: { legend: { display: false } },
       scales: {
-        y: {
-          beginAtZero: true,
-          ticks: { precision: 0 }
-        }
+        y: { beginAtZero: true, ticks: { precision: 0 } }
       }
     }
   });
 }
+let grafRendahChart;
+
+function renderGrafRendah() {
+  const ctx = document.getElementById('grafRendah');
+  if (!ctx) return;
+
+  const data = kiraBulanan(allData, 'pertukaran_rendah');
+  const bulan = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogos','Sep','Okt','Nov','Dis'];
+
+  if (grafRendahChart) grafRendahChart.destroy();
+
+  grafRendahChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: bulan,
+      datasets: [{
+        label: 'Pertukaran Rendah',
+        data: data
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
+  });
+}
+
 
  const firebaseConfig = {
   apiKey: "AIzaSyBfDXjt_-6cBG1wzhr5MUJz29VLGx_oTcc",
@@ -3185,7 +3200,20 @@ async function editPertukaranRendah(id) {
 }
     function renderStatistik() {
       const content = document.getElementById('contentArea');
-      
+      const dataMenengah = allData.filter(d => d.type === 'pertukaran_menengah');
+  const dataRendah   = allData.filter(d => d.type === 'pertukaran_rendah');
+
+  const totalOfficers = allData.filter(d => d.type === 'officer').length;
+  const totalNews = allData.filter(d => d.type === 'news').length;
+  const totalDocuments = allData.filter(d => d.type === 'document').length;
+  const totalGuestbook = allData.filter(d => d.type === 'guestbook').length;
+  const totalSharing = allData.filter(d => d.type === 'sharing').length;
+  const totalCircular = allData.filter(d => d.type === 'circular').length;
+  const totalComments = allData.filter(
+    d => d.type === 'interaction' && d.interaction_type === 'comment'
+  ).length;
+
+  const schoolStats = allData.find(d => d.type === 'school_stats');
       const totalOfficers = allData.filter(d => d.type === 'officer').length;
       const totalNews = allData.filter(d => d.type === 'news').length;
       const totalDocuments = allData.filter(d => d.type === 'document').length;
@@ -3197,6 +3225,25 @@ async function editPertukaranRendah(id) {
       const schoolStats = allData.find(d => d.type === 'school_stats');
       
       content.innerHTML = `
+      <div class="card">
+  <h2 class="card-title">🔄 Statistik Pertukaran Murid</h2>
+
+  ${renderStatistikRingkas(dataMenengah, 'Menengah')}
+  ${renderStatistikRingkas(dataRendah, 'Rendah')}
+
+  <div class="grid">
+    <div class="grid-item">
+      <h3 style="margin-bottom:1rem;">🔵 Menengah</h3>
+      <canvas id="grafMenengah" height="120"></canvas>
+    </div>
+
+    <div class="grid-item">
+      <h3 style="margin-bottom:1rem;">🟢 Rendah</h3>
+      <canvas id="grafRendah" height="120"></canvas>
+    </div>
+  </div>
+</div>
+
         <div class="card">
           <h2 class="card-title">📊 Data Sekolah & Pendidikan</h2>
           ${isAdmin ? '<button class="btn" onclick="editSchoolStats()">✏️ Edit Data Sekolah</button>' : ''}
@@ -3423,6 +3470,11 @@ async function editPertukaranRendah(id) {
           </div>
         </div>
       `;
+     setTimeout(() => {
+  renderGrafMenengah();
+  renderGrafRendah();
+}, 0);
+
     }
 
     async function editSchoolStats() {
@@ -3830,6 +3882,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
