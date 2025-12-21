@@ -2741,7 +2741,7 @@ function renderPertukaranMenengah() {
 
   // 1️⃣ Masukkan HTML borang DAHULU
   document.getElementById('modalBody').innerHTML = `
-    <form id="pertukaranForm">
+    <form id="pertukaranMenengahForm">
       <div class="form-group">
         <label class="form-label">Nama Murid</label>
         <input class="form-input" id="namaMurid" required>
@@ -2777,7 +2777,7 @@ function renderPertukaranMenengah() {
 
   // 2️⃣ BARU daftar event submit
   document
-    .getElementById('pertukaranForm')
+    .getElementById('pertukaranMenengahForm')
     .addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -2802,12 +2802,11 @@ function renderPertukaranMenengah() {
         tarikh: new Date().toLocaleDateString('ms-MY'),
 
         // 🔥 WAJIB untuk Firestore (orderBy)
-        createdAt: new Date()
       });
 
       if (result.isOk) {
         showToast('✅ Permohonan berjaya direkodkan');
-        document.getElementById('pertukaranForm').reset();
+        document.getElementById('pertukaranMenengahForm').reset();
         closeModal();
       } else {
         showToast('❌ Gagal simpan permohonan');
@@ -2827,7 +2826,7 @@ async function editPertukaranMenengah(id) {
     'Edit Permohonan Pertukaran Murid Menengah';
 
   document.getElementById('modalBody').innerHTML = `
-    <form id="editPertukaranForm">
+    <form id="editpertukaranMenengahForm">
       <div class="form-group">
         <label class="form-label">Nama Murid</label>
         <input class="form-input" id="editNamaMurid" value="${item.nama_murid}" required>
@@ -2842,6 +2841,18 @@ async function editPertukaranMenengah(id) {
         <label class="form-label">Sekolah Baharu</label>
         <input class="form-input" id="editSekolahBaharu" value="${item.sekolah_baharu}" required>
       </div>
+      <div class="form-group">
+      
+  <label class="form-label">Tingkatan</label>
+  <select class="form-input" id="editTingkatan">
+    <option ${item.tingkatan === 'Tingkatan 1' ? 'selected' : ''}>Tingkatan 1</option>
+    <option ${item.tingkatan === 'Tingkatan 2' ? 'selected' : ''}>Tingkatan 2</option>
+    <option ${item.tingkatan === 'Tingkatan 3' ? 'selected' : ''}>Tingkatan 3</option>
+    <option ${item.tingkatan === 'Tingkatan 4' ? 'selected' : ''}>Tingkatan 4</option>
+    <option ${item.tingkatan === 'Tingkatan 5' ? 'selected' : ''}>Tingkatan 5</option>
+    <option ${item.tingkatan === 'Tingkatan 6' ? 'selected' : ''}>Tingkatan 6</option>
+  </select>
+</div>
 
       <div class="form-group">
         <label class="form-label">Status</label>
@@ -2860,14 +2871,14 @@ async function editPertukaranMenengah(id) {
   modal.classList.add('active');
 
   document
-    .getElementById('editPertukaranForm')
+    .getElementById('editpertukaranMenengahForm')
     .addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const result = await window.dataSdk.update({
         __backendId: id,
         nama_murid: document.getElementById('editNamaMurid').value.trim(),
-       tingkatan: document.getElementById('tingkatan').value,
+       tingkatan: document.getElementById('editTingkatan').value,
         sekolah_asal: document.getElementById('editSekolahAsal').value.trim(),
         sekolah_baharu: document.getElementById('editSekolahBaharu').value.trim(),
         status: document.getElementById('editStatus').value,
@@ -2953,7 +2964,7 @@ function renderPertukaranRendah() {
 
   // 1️⃣ Masukkan HTML borang DAHULU
   document.getElementById('modalBody').innerHTML = `
-    <form id="pertukaranForm">
+    <form id="pertukaranRendahForm">
       <div class="form-group">
         <label class="form-label">Nama Murid</label>
         <input class="form-input" id="namaMurid" required>
@@ -2989,7 +3000,7 @@ function renderPertukaranRendah() {
 
   // 2️⃣ BARU daftar event submit
   document
-    .getElementById('pertukaranForm')
+    .getElementById('pertukaranRendahForm')
     .addEventListener('submit', async (e) => {
       e.preventDefault();
 
@@ -3014,12 +3025,12 @@ function renderPertukaranRendah() {
         tarikh: new Date().toLocaleDateString('ms-MY'),
 
         // 🔥 WAJIB untuk Firestore (orderBy)
-        createdAt: new Date()
+       
       });
 
       if (result.isOk) {
         showToast('✅ Permohonan berjaya direkodkan');
-        document.getElementById('pertukaranForm').reset();
+        document.getElementById('pertukaranRendahForm').reset();
         closeModal();
       } else {
         showToast('❌ Gagal simpan permohonan');
@@ -3039,7 +3050,7 @@ async function editPertukaranRendah(id) {
     'Edit Permohonan Pertukaran Murid Rendah';
 
   document.getElementById('modalBody').innerHTML = `
-    <form id="editPertukaranForm">
+    <form id="editpertukaranRendahForm">
       <div class="form-group">
         <label class="form-label">Nama Murid</label>
         <input class="form-input" id="editNamaMurid" value="${item.nama_murid}" required>
@@ -3054,6 +3065,19 @@ async function editPertukaranRendah(id) {
         <label class="form-label">Sekolah Baharu</label>
         <input class="form-input" id="editSekolahBaharu" value="${item.sekolah_baharu}" required>
       </div>
+      
+      <div class="form-group">
+  <label class="form-label">Tahun</label>
+  <select class="form-input" id="editTahun">
+    <option ${item.tingkatan === 'Tahun 1' ? 'selected' : ''}>Tahun 1</option>
+    <option ${item.tingkatan === 'Tahun 2' ? 'selected' : ''}>Tahun 2</option>
+    <option ${item.tingkatan === 'Tahun 3' ? 'selected' : ''}>Tahun 3</option>
+    <option ${item.tingkatan === 'Tahun 4' ? 'selected' : ''}>Tahun 4</option>
+    <option ${item.tingkatan === 'Tahun 5' ? 'selected' : ''}>Tahun 5</option>
+    <option ${item.tingkatan === 'Tahun 6' ? 'selected' : ''}>Tahun 6</option>
+  </select>
+</div>
+
 
       <div class="form-group">
         <label class="form-label">Status</label>
@@ -3072,14 +3096,14 @@ async function editPertukaranRendah(id) {
   modal.classList.add('active');
 
   document
-    .getElementById('editPertukaranForm')
+    .getElementById('editpertukaranRendahForm')
     .addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const result = await window.dataSdk.update({
         __backendId: id,
         nama_murid: document.getElementById('editNamaMurid').value.trim(),
-       tingkatan: document.getElementById('tingkatan').value,
+       tingkatan: document.getElementById('editTahun').value,
         sekolah_asal: document.getElementById('editSekolahAsal').value.trim(),
         sekolah_baharu: document.getElementById('editSekolahBaharu').value.trim(),
         status: document.getElementById('editStatus').value,
@@ -3739,6 +3763,7 @@ async function editPertukaranRendah(id) {
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html> 
+
 
 
 
