@@ -21,6 +21,24 @@
 
   return bulan;
 }
+ function renderStatistikRingkas(data, label) {
+  const jumlah = data.length;
+  const lulus = data.filter(d => d.status === 'Diluluskan').length;
+  const proses = data.filter(d => d.status === 'Dalam Proses').length;
+  const tolak = data.filter(d => d.status === 'Ditolak').length;
+
+  return `
+    <div class="card" style="margin-top:1rem">
+      <h3>🏫 ${label}</h3>
+      <div class="grid">
+        <div class="grid-item"><strong>${jumlah}</strong><br>Jumlah</div>
+        <div class="grid-item"><strong>${lulus}</strong><br>Diluluskan</div>
+        <div class="grid-item"><strong>${proses}</strong><br>Dalam Proses</div>
+        <div class="grid-item"><strong>${tolak}</strong><br>Ditolak</div>
+      </div>
+    </div>
+  `;
+}
 let grafPertukaranChart;
 
 function renderGrafPertukaran() {
@@ -2732,6 +2750,7 @@ const profile = allData.find(d => d.type === 'profile') || {};
     }
 function renderPertukaranMenengah() {
   const content = document.getElementById('contentArea');
+  if (!content) return;
 
   const data = allData.filter(d => d.type === 'pertukaran_menengah');
 
@@ -2741,10 +2760,6 @@ function renderPertukaranMenengah() {
   const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
 
   content.innerHTML = `
-    <div class="card">
-  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
-  <canvas id="grafPertukaran" height="120"></canvas>
-</div>
     <div class="card">
       <h2 class="card-title">🔄 Dashboard Pertukaran Murid Menengah</h2>
 
@@ -2776,28 +2791,34 @@ function renderPertukaranMenengah() {
     <div class="card">
       <h2 class="card-title">📄 Senarai Permohonan</h2>
 
-      ${data.length === 0
-        ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
-        : data.map(item => `
-          <div class="grid-item" style="margin-bottom:1rem">
-            <strong>👤 ${item.nama_murid}</strong><br>
-            🎓 Tingkatan: <strong>${item.tingkatan}</strong><br>
-            🏫 ${item.sekolah_asal} ➜ ${item.sekolah_baharu}<br>
-            📅 ${item.tarikh}<br>
-            📌 Status: <strong>${item.status}</strong>
+      <div class="scroll-container">
+        <div class="scroll-content">
+          ${
+            data.length === 0
+              ? `<p style="text-align:center;color:#999">Tiada permohonan direkodkan</p>`
+              : data.map(item => `
+                <div class="scroll-item grid-item">
+                  <strong>👤 ${item.nama_murid}</strong><br>
+                  🎓 Tingkatan: <strong>${item.tingkatan || '-'}</strong><br>
+                  🏫 ${item.sekolah_asal} ➜ ${item.sekolah_baharu}<br>
+                  📅 ${item.tarikh}<br>
+                  📌 Status: <strong>${item.status}</strong>
 
-            ${isAdmin ? `
-              <div style="margin-top:0.5rem">
-                <button class="btn btn-small" onclick="editPertukaranMenengah('${item.__backendId}')">✏️ Edit</button>
-                <button class="btn btn-delete btn-small" onclick="deleteItem('${item.__backendId}')">Padam</button>
-              </div>
-            ` : ''}
-          </div>
-        `).join('')
-      }
+                  ${isAdmin ? `
+                    <div style="margin-top:0.5rem">
+                      <button class="btn btn-small" onclick="editPertukaranMenengah('${item.__backendId}')">✏️ Edit</button>
+                      <button class="btn btn-delete btn-small" onclick="deleteItem('${item.__backendId}')">🗑 Padam</button>
+                    </div>
+                  ` : ''}
+                </div>
+              `).join('')
+          }
+        </div>
+      </div>
     </div>
   `;
-  setTimeout(renderGrafPertukaran, 0);
+}
+
 }
    async function addPertukaranMenengah() {
   const modal = document.getElementById('genericModal');
@@ -2969,11 +2990,7 @@ function renderPertukaranRendah() {
   const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
 
   content.innerHTML = `
- <div class="card">
-  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
-  <canvas id="grafPertukaran" height="120"></canvas>
-</div>
-   <div class="card">
+    <div class="card">
       <h2 class="card-title">🔄 Dashboard Pertukaran Murid Rendah</h2>
 
       ${isAdmin ? `<button class="btn" onclick="addPertukaranRendah()">+ Permohonan Baharu</button>` : ''}
@@ -3009,7 +3026,7 @@ function renderPertukaranRendah() {
         : data.map(item => `
           <div class="grid-item" style="margin-bottom:1rem">
             <strong>👤 ${item.nama_murid}</strong><br>
-            🎓 Tahun: <strong>${item.tingkatan}</strong><br>
+            🎒 Tahun: <strong>${item.tahun}</strong><br>
             🏫 ${item.sekolah_asal} ➜ ${item.sekolah_baharu}<br>
             📅 ${item.tarikh}<br>
             📌 Status: <strong>${item.status}</strong>
@@ -3017,7 +3034,7 @@ function renderPertukaranRendah() {
             ${isAdmin ? `
               <div style="margin-top:0.5rem">
                 <button class="btn btn-small" onclick="editPertukaranRendah('${item.__backendId}')">✏️ Edit</button>
-                <button class="btn btn-delete btn-small" onclick="deleteItem('${item.__backendId}')">Padam</button>
+                <button class="btn btn-delete btn-small" onclick="deleteItem('${item.__backendId}')">🗑 Padam</button>
               </div>
             ` : ''}
           </div>
@@ -3188,19 +3205,28 @@ async function editPertukaranRendah(id) {
     });
 }
     function renderStatistik() {
-      const content = document.getElementById('contentArea');
-      
-      const totalOfficers = allData.filter(d => d.type === 'officer').length;
-      const totalNews = allData.filter(d => d.type === 'news').length;
-      const totalDocuments = allData.filter(d => d.type === 'document').length;
-      const totalGuestbook = allData.filter(d => d.type === 'guestbook').length;
-      const totalSharing = allData.filter(d => d.type === 'sharing').length;
-      const totalCircular = allData.filter(d => d.type === 'circular').length;
-      const totalComments = allData.filter(d => d.type === 'interaction' && d.interaction_type === 'comment').length;
-      
-      const schoolStats = allData.find(d => d.type === 'school_stats');
-      
-      content.innerHTML = `
+  const content = document.getElementById('contentArea');
+
+  // ================= DATA PERTUKARAN =================
+  const dataMenengah = allData.filter(d => d.type === 'pertukaran_menengah');
+  const dataRendah = allData.filter(d => d.type === 'pertukaran_rendah');
+
+  content.innerHTML = `
+    <div class="card">
+      <h2 class="card-title">📊 Statistik Pertukaran Murid</h2>
+
+      ${renderStatistikRingkas(dataMenengah, 'Menengah')}
+      ${renderStatistikRingkas(dataRendah, 'Rendah')}
+
+      <div style="margin-top:2rem">
+        <canvas id="grafPertukaran" height="120"></canvas>
+      </div>
+    </div>
+  `;
+
+  // ⚠️ Penting: graf dipanggil selepas canvas wujud
+  setTimeout(renderGrafPertukaran, 0);
+}
         <div class="card">
           <h2 class="card-title">📊 Data Sekolah & Pendidikan</h2>
           ${isAdmin ? '<button class="btn" onclick="editSchoolStats()">✏️ Edit Data Sekolah</button>' : ''}
@@ -3834,6 +3860,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
