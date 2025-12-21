@@ -6,56 +6,43 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore-compat.js"></script>
 
 <script>
- function kiraBulanan(data, type) {
+function kiraBulananMenengah() {
   const bulan = Array(12).fill(0);
 
-  data
-    .filter(d => d.type === type)
+  allData
+    .filter(d => d.type === 'pertukaran_menengah')
     .forEach(d => {
       const tarikh = d.createdAt?.toDate
         ? d.createdAt.toDate()
         : new Date(d.timestamp || d.tarikh);
-      const m = tarikh.getMonth(); // 0-11
-      bulan[m]++;
+
+      bulan[tarikh.getMonth()]++;
     });
 
   return bulan;
 }
-let grafPertukaranChart;
+let grafMenengah;
 
-function renderGrafPertukaran() {
-  const ctx = document.getElementById('grafPertukaran');
-  if (!ctx) return;
+function renderGrafMenengah() {
+  const canvas = document.getElementById('grafPertukaranMenengah');
+  if (!canvas) return;
 
   const labelBulan = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogos','Sep','Okt','Nov','Dis'];
+  const dataMenengah = kiraBulananMenengah();
 
-  const dataMenengah = kiraBulanan(allData, 'pertukaran_menengah');
-  const dataRendah = kiraBulanan(allData, 'pertukaran_rendah');
+  if (grafMenengah) grafMenengah.destroy();
 
-  if (grafPertukaranChart) grafPertukaranChart.destroy();
-
-  grafPertukaranChart = new Chart(ctx, {
+  grafMenengah = new Chart(canvas, {
     type: 'bar',
     data: {
       labels: labelBulan,
-      datasets: [
-        {
-          label: 'Menengah',
-          data: dataMenengah,
-          backgroundColor: '#2563eb'
-        },
-        {
-          label: 'Rendah',
-          data: dataRendah,
-          backgroundColor: '#16a34a'
-        }
-      ]
+      datasets: [{
+        label: 'Pertukaran Murid Menengah',
+        data: dataMenengah
+      }]
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: { position: 'top' }
-      },
       scales: {
         y: {
           beginAtZero: true,
@@ -2741,9 +2728,9 @@ function renderPertukaranMenengah() {
   const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
 
   content.innerHTML = `
-  <div class="card">
-  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
-  <canvas id="grafPertukaran" height="120"></canvas>
+ <div class="card">
+  <h2 class="card-title">📊 Analisis Pertukaran Murid Menengah (Bulanan)</h2>
+  <canvas id="grafPertukaranMenengah" height="120"></canvas>
 </div>
     <div class="card">
       <h2 class="card-title">🔄 Dashboard Pertukaran Murid Menengah</h2>
@@ -3830,6 +3817,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
