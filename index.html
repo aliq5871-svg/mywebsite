@@ -2741,10 +2741,6 @@ function renderPertukaranMenengah() {
   const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
 
   content.innerHTML = `
-  <div class="card">
-  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
-  <canvas id="grafPertukaran" height="120"></canvas>
-</div>
     <div class="card">
       <h2 class="card-title">🔄 Dashboard Pertukaran Murid Menengah</h2>
 
@@ -3197,6 +3193,10 @@ async function editPertukaranRendah(id) {
       const schoolStats = allData.find(d => d.type === 'school_stats');
       
       content.innerHTML = `
+       <div class="card">
+  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
+  <canvas id="grafPertukaran" height="120"></canvas>
+</div>
         <div class="card">
           <h2 class="card-title">📊 Data Sekolah & Pendidikan</h2>
           ${isAdmin ? '<button class="btn" onclick="editSchoolStats()">✏️ Edit Data Sekolah</button>' : ''}
@@ -3830,6 +3830,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
