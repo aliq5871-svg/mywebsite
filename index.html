@@ -3207,11 +3207,26 @@ async function editPertukaranRendah(id) {
     function renderStatistik() {
   const content = document.getElementById('contentArea');
 
-  // ================= DATA PERTUKARAN =================
+  // ===== DATA PERTUKARAN =====
   const dataMenengah = allData.filter(d => d.type === 'pertukaran_menengah');
   const dataRendah = allData.filter(d => d.type === 'pertukaran_rendah');
 
+  // ===== DATA SEKOLAH =====
+  const schoolStats = allData.find(d => d.type === 'school_stats');
+
+  // ===== STATISTIK PORTAL =====
+  const totalOfficers = allData.filter(d => d.type === 'officer').length;
+  const totalNews = allData.filter(d => d.type === 'news').length;
+  const totalDocuments = allData.filter(d => d.type === 'document').length;
+  const totalGuestbook = allData.filter(d => d.type === 'guestbook').length;
+  const totalSharing = allData.filter(d => d.type === 'sharing').length;
+  const totalCircular = allData.filter(d => d.type === 'circular').length;
+  const totalComments = allData.filter(
+    d => d.type === 'interaction' && d.interaction_type === 'comment'
+  ).length;
+
   content.innerHTML = `
+    <!-- ================= STATISTIK PERTUKARAN ================= -->
     <div class="card">
       <h2 class="card-title">📊 Statistik Pertukaran Murid</h2>
 
@@ -3222,238 +3237,54 @@ async function editPertukaranRendah(id) {
         <canvas id="grafPertukaran" height="120"></canvas>
       </div>
     </div>
+
+    <!-- ================= DATA SEKOLAH ================= -->
+    <div class="card">
+      <h2 class="card-title">📊 Data Sekolah & Pendidikan</h2>
+      ${isAdmin ? `<button class="btn" onclick="editSchoolStats()">✏️ Edit Data Sekolah</button>` : ''}
+
+      <div class="grid">
+        <div class="grid-item">
+          <h3>${schoolStats?.sekolah_rendah || 33}</h3>
+          <p>Sekolah Rendah</p>
+        </div>
+        <div class="grid-item">
+          <h3>${schoolStats?.sekolah_menengah || 7}</h3>
+          <p>Sekolah Menengah</p>
+        </div>
+        <div class="grid-item">
+          <h3>${schoolStats?.tingkatan_enam || 4}</h3>
+          <p>Tingkatan Enam</p>
+        </div>
+        <div class="grid-item">
+          <h3>${schoolStats?.jumlah_murid?.toLocaleString() || '18,395'}</h3>
+          <p>Jumlah Murid</p>
+        </div>
+        <div class="grid-item">
+          <h3>${schoolStats?.jumlah_guru || 625}</h3>
+          <p>Jumlah Guru</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= STATISTIK PORTAL ================= -->
+    <div class="card">
+      <h2 class="card-title">📊 Statistik Portal</h2>
+      <div class="grid">
+        <div class="grid-item"><strong>${totalOfficers}</strong><br>Pegawai</div>
+        <div class="grid-item"><strong>${totalNews}</strong><br>Berita</div>
+        <div class="grid-item"><strong>${totalDocuments}</strong><br>Dokumen</div>
+        <div class="grid-item"><strong>${totalGuestbook}</strong><br>Pelawat</div>
+        <div class="grid-item"><strong>${totalSharing}</strong><br>Perkongsian</div>
+        <div class="grid-item"><strong>${totalCircular}</strong><br>Pekeliling</div>
+        <div class="grid-item"><strong>${totalComments}</strong><br>Komen</div>
+      </div>
+    </div>
   `;
 
-  // ⚠️ Penting: graf dipanggil selepas canvas wujud
+  // 🎯 WAJIB: panggil graf selepas canvas wujud
   setTimeout(renderGrafPertukaran, 0);
 }
-        <div class="card">
-          <h2 class="card-title">📊 Data Sekolah & Pendidikan</h2>
-          ${isAdmin ? '<button class="btn" onclick="editSchoolStats()">✏️ Edit Data Sekolah</button>' : ''}
-          
-          <div class="grid">
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${schoolStats?.sekolah_rendah || 33}</h3>
-              <p style="color: #666; font-weight: 600;">Sekolah Rendah</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${schoolStats?.sekolah_menengah || 7}</h3>
-              <p style="color: #666; font-weight: 600;">Sekolah Menengah</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📘</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${schoolStats?.sekolah_k9 || 1}</h3>
-              <p style="color: #666; font-weight: 600;">Sekolah K9</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">👶</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${schoolStats?.prasekolah || 12}</h3>
-              <p style="color: #666; font-weight: 600;">Prasekolah</p>
-            </div>
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 99, 132, 0.1) 0%, rgba(255, 159, 159, 0.05) 100%); border-left: 4px solid #ff6384; text-align: center;">
-  <div style="font-size: 3rem; margin-bottom: 1rem;">🧒</div>
-  <h3 style="font-size: 2.5rem; font-weight: 700; color: #ff6384; margin-bottom: 0.5rem;">
-    ${schoolStats?.prasekolah_swasta || 3}
-  </h3>
-  <p style="color: #666; font-weight: 600;">Prasekolah Swasta</p>
-</div>
-
-            
-           <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 219, 77, 0.05) 100%); border-left: 4px solid #ffc107; text-align: center;">
-  <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
-  <h3 style="font-size: 2.5rem; font-weight: 700; color: #ffc107; margin-bottom: 0.5rem;">
-    ${schoolStats?.sekolah_swasta_rendah || 2}
-  </h3>
-  <p style="color: #666; font-weight: 600;">Sekolah Swasta Rendah</p>
-</div>
-<div class="grid-item" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(72, 199, 116, 0.05) 100%); border-left: 4px solid #28a745; text-align: center;">
-  <div style="font-size: 3rem; margin-bottom: 1rem;">🎓</div>
-  <h3 style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin-bottom: 0.5rem;">
-    ${schoolStats?.sekolah_swasta_menengah || 1}
-  </h3>
-  <p style="color: #666; font-weight: 600;">Sekolah Swasta Menengah</p>
-</div>
-
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${schoolStats?.tingkatan_enam || 4}</h3>
-              <p style="color: #666; font-weight: 600;">Pusat Tingkatan Enam</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${schoolStats?.ppki_menengah || 2}</h3>
-              <p style="color: #666; font-weight: 600;">PPKI Menengah</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🎒</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${schoolStats?.ppki_rendah || 5}</h3>
-              <p style="color: #666; font-weight: 600;">PPKI Rendah</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(72, 199, 116, 0.05) 100%); border-left: 4px solid #28a745; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍🎓</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin-bottom: 0.5rem;">${schoolStats?.jumlah_murid?.toLocaleString() || '18,395'}</h3>
-              <p style="color: #666; font-weight: 600;">Jumlah Murid</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 219, 77, 0.05) 100%); border-left: 4px solid #ffc107; text-align: center;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">👨</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #ffc107; margin-bottom: 0.5rem;">${schoolStats?.jumlah_guru || 625}</h3>
-              <p style="color: #666; font-weight: 600;">Jumlah Guru</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2 class="card-title">📊 Statistik Portal</h2>
-          
-          <div class="grid">
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${totalOfficers}</h3>
-              <p style="color: #666; font-weight: 600;">Jumlah Pegawai</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📰</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${totalNews}</h3>
-              <p style="color: #666; font-weight: 600;">Berita & Aktiviti</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${totalDocuments}</h3>
-              <p style="color: #666; font-weight: 600;">Dokumen & Borang</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📖</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${totalGuestbook}</h3>
-              <p style="color: #666; font-weight: 600;">Mesej Pelawat</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${totalSharing}</h3>
-              <p style="color: #666; font-weight: 600;">Perkongsian</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${totalCircular}</h3>
-              <p style="color: #666; font-weight: 600;">Pekeliling</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 219, 77, 0.05) 100%); border-left: 4px solid #ffc107;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #ffc107; margin-bottom: 0.5rem;">${totalComments}</h3>
-              <p style="color: #666; font-weight: 600;">Jumlah Komen</p>
-            </div>
-            
-            <div class="grid-item" style="background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(72, 199, 116, 0.05) 100%); border-left: 4px solid #28a745;">
-              <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
-              <h3 style="font-size: 2.5rem; font-weight: 700; color: #28a745; margin-bottom: 0.5rem;">${totalOfficers + totalNews + totalDocuments + totalGuestbook + totalSharing + totalCircular}</h3>
-              <p style="color: #666; font-weight: 600;">Jumlah Keseluruhan</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <h2 class="card-title">📅 Aktiviti Terkini</h2>
-          <div style="display: flex; flex-direction: column; gap: 1rem;">
-            ${(() => {
-              const activities = [];
-              
-              // Collect all activities with timestamps
-              allData.forEach(item => {
-                if (item.timestamp && (item.type === 'guestbook' || item.type === 'sharing' || item.type === 'news' || item.type === 'document' || item.type === 'circular')) {
-                  let icon = '📄';
-                  let typeLabel = 'Item';
-                  
-                  if (item.type === 'guestbook') {
-                    icon = '📖';
-                    typeLabel = 'Buku Pelawat';
-                  } else if (item.type === 'sharing') {
-                    icon = '🤝';
-                    typeLabel = 'Perkongsian';
-                  } else if (item.type === 'news') {
-                    icon = '📰';
-                    typeLabel = 'Berita';
-                  } else if (item.type === 'document') {
-                    icon = '📑';
-                    typeLabel = 'Dokumen';
-                  } else if (item.type === 'circular') {
-                    icon = '📋';
-                    typeLabel = 'Pekeliling';
-                  }
-                  
-                  activities.push({
-                    icon,
-                    typeLabel,
-                    title: item.title || item.message || item.visitor_name || 'Tanpa tajuk',
-                    timestamp: new Date(item.timestamp),
-                    date: item.date || new Date(item.timestamp).toLocaleDateString('ms-MY')
-                  });
-                }
-              });
-              
-              // Sort by timestamp (newest first)
-              activities.sort((a, b) => b.timestamp - a.timestamp);
-              
-              // Take only the latest 10 activities
-              const latestActivities = activities.slice(0, 10);
-              
-              if (latestActivities.length === 0) {
-                return '<div style="background: rgba(255, 255, 255, 0.9); padding: 1.5rem; border-radius: 15px; border-left: 4px solid #007bff; text-align: center; color: #999;">Tiada aktiviti terkini</div>';
-              }
-              
-              return latestActivities.map(activity => {
-                const now = new Date();
-                const diffMs = now - activity.timestamp;
-                const diffMins = Math.floor(diffMs / 60000);
-                const diffHours = Math.floor(diffMs / 3600000);
-                const diffDays = Math.floor(diffMs / 86400000);
-                
-                let timeAgo = '';
-                if (diffMins < 1) {
-                  timeAgo = 'Baru sahaja';
-                } else if (diffMins < 60) {
-                  timeAgo = `${diffMins} minit lalu`;
-                } else if (diffHours < 24) {
-                  timeAgo = `${diffHours} jam lalu`;
-                } else if (diffDays === 1) {
-                  timeAgo = 'Semalam';
-                } else {
-                  timeAgo = `${diffDays} hari lalu`;
-                }
-                
-                return `
-                  <div style="background: rgba(255, 255, 255, 0.9); padding: 1.2rem; border-radius: 12px; border-left: 4px solid #007bff; display: flex; align-items: center; gap: 1rem; transition: all 0.3s ease;">
-                    <div style="font-size: 2rem; min-width: 40px; text-align: center;">${activity.icon}</div>
-                    <div style="flex: 1;">
-                      <h4 style="color: #007bff; font-weight: 600; margin-bottom: 0.3rem; font-size: 1rem;">${activity.title}</h4>
-                      <p style="color: #666; font-size: 0.85rem; margin-bottom: 0.2rem;">${activity.typeLabel}</p>
-                      <div style="display: flex; gap: 1rem; font-size: 0.8rem; color: #999;">
-                        <span>🕐 ${timeAgo}</span>
-                        <span>📅 ${activity.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                `;
-              }).join('');
-            })()}
-          </div>
-        </div>
-      `;
-    }
 
     async function editSchoolStats() {
       const stats = allData.find(d => d.type === 'school_stats');
@@ -3859,6 +3690,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
