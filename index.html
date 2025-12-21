@@ -2969,10 +2969,6 @@ function renderPertukaranRendah() {
   const dalamProses = data.filter(d => d.status === 'Dalam Proses').length;
 
   content.innerHTML = `
- <div class="card">
-  <h2 class="card-title">📊 Statistik Pertukaran (Bulanan)</h2>
-  <canvas id="grafPertukaran" height="120"></canvas>
-</div>
    <div class="card">
       <h2 class="card-title">🔄 Dashboard Pertukaran Murid Rendah</h2>
 
@@ -3834,6 +3830,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
