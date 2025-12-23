@@ -1230,7 +1230,12 @@ function renderGrafPertukaran() {
 .status-select.status-kursus { background:#2563eb; }
 .status-select.status-bengkel { background:#f97316; }
 .status-select.status-keluar { background:#6b7280; }
-
+.gambar-utama {
+  width: 100%;
+  max-height: 380px;
+  object-fit: cover;
+  border-radius: 12px;
+}
 
   </style>
   <style>@view-transition { navigation: auto; }</style>
@@ -1559,13 +1564,10 @@ function renderGrafPertukaran() {
       
       content.innerHTML = `
         <div class="hero">
+         <img src="https://i.imgur.com/gqgGZYF.png" class="gambar-utama">
           <h1 class="hero-title">Selamat Datang</h1>
           <p class="hero-description">Portal Rasmi Sektor Pengurusan Sekolah<br>Pejabat Pendidikan Daerah Kota Marudu</p>
         </div>
-<div class="card">
-  <img src="https://i.imgur.com/gqgGZYF.png" class="gambar-utama">
-</div>
-
         <div class="card">
           <h2 class="card-title">📚 Visi & Misi</h2>
           <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.3rem;">Visi</h3>
@@ -3845,6 +3847,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
