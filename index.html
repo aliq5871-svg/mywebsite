@@ -132,6 +132,43 @@ function renderGrafPertukaran() {
   <title>Portal Sektor Pengurusan Sekolah - PPD Kota Marudu</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
+   .hero {
+  min-height: 70vh;
+  background-image: url('https://i.imgur.com/gqgGZYF.png'); /* tukar URL gambar */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+/* Lapisan gelap supaya teks jelas */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+/* Kandungan teks */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2rem;
+}
     * {
       margin: 0;
       padding: 0;
@@ -995,19 +1032,6 @@ function renderGrafPertukaran() {
         height: 60px;
       }
     }
-
-    /* Hero */
-    .hero {
-      background: linear-gradient(135deg, rgba(207, 232, 255, 0.3) 0%, rgba(255, 255, 255, 0.5) 100%);
-      border-radius: 20px;
-      padding: 3rem;
-      text-align: center;
-      margin-bottom: 2rem;
-      box-shadow: 0 8px 30px rgba(0, 123, 255, 0.1);
-      animation: fadeIn 0.8s ease;
-      border: 1px solid rgba(0, 123, 255, 0.1);
-    }
-
     body.dark-mode .hero {
       background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(26, 26, 46, 0.5) 100%);
       border-color: rgba(0, 191, 255, 0.2);
@@ -1546,11 +1570,14 @@ function renderGrafPertukaran() {
       const totalSharing = allData.filter(d => d.type === 'sharing').length;
       
       content.innerHTML = `
-        <div class="hero">
-          <h1 class="hero-title">Selamat Datang</h1>
-          <p class="hero-description">Portal Rasmi Sektor Pengurusan Sekolah<br>Pejabat Pendidikan Daerah Kota Marudu</p>
-        </div>
+        <section class="hero">
+  <div class="hero-overlay"></div>
 
+  <div class="hero-content">
+    <h1>Selamat Datang</h1>
+    <p>Portal Rasmi PPD Kota Marudu</p>
+  </div>
+</section>
         <div class="card">
           <h2 class="card-title">📚 Visi & Misi</h2>
           <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.3rem;">Visi</h3>
@@ -3830,6 +3857,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
