@@ -1153,12 +1153,10 @@ function renderGrafPertukaran() {
 }
 
 /* Mobile */
-@media (max-width: 768px) {
-  .org-card,
-  .org-card.small {
-    width: 100%;
-  }
-
+@media (max-width:768px) {
+  .menu { display:none; }
+  .menu.active { display:block; }
+}
   .org-line {
     height: 16px;
   }
@@ -3830,6 +3828,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
