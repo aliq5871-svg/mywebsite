@@ -1337,18 +1337,21 @@ function renderGrafPertukaran() {
       }
     };
 
-    async function init() {
-      const result = await window.dataSdk.init(dataHandler);
-      if (!result.isOk) {
-        showToast('❌ Sistem tidak tersedia');
-        return;
-      }
+   async function init() {
+  const result = await window.dataSdk.init(dataHandler);
+  if (!result.isOk) {
+    showToast('❌ Sistem tidak tersedia');
+    return;
+  }
 
-      setupEventListeners();
-      updateDateTime();
-      setInterval(updateDateTime, 1000);
-      checkLoginStatus();
-    }
+  setupEventListeners();
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+  checkLoginStatus();
+
+  // 🔥 WAJIB TAMBAH BARIS INI
+  renderUtama();
+}
 
     function setupEventListeners() {
       document.getElementById('loginBtn').addEventListener('click', () => {
@@ -3835,6 +3838,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
