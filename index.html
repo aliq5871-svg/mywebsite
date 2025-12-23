@@ -68,7 +68,7 @@ function renderGrafPertukaran() {
 
  const firebaseConfig = {
   apiKey: "AIzaSyBfDXjt_-6cBG1wzhr5MUJz29VLGx_oTcc",
-  authDomain: "portal-sps-ppd-kota-marudu.firebaseapp.com",
+  authDo: "portal-sps-ppd-kota-marudu.firebaseapp.com",
   projectId: "portal-sps-ppd-kota-marudu",
   storageBucket: "portal-sps-ppd-kota-marudu.firebasestorage.app",
   messagingSenderId: "370438750434",
@@ -1318,7 +1318,6 @@ function renderGrafPertukaran() {
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
- <body>
 <body class="h-full"><!-- Header -->
   <header>
    <div class="header-left"><img id="headerLogo" src="https://i.imgur.com/4EGUuTx.png" alt="Logo" class="logo-img">
@@ -1333,40 +1332,41 @@ function renderGrafPertukaran() {
     <div class="datetime" id="datetime"></div><button class="theme-toggle" id="themeToggle">🌙</button> <button class="login-btn" id="loginBtn">Login Admin</button> <button class="login-btn hidden" id="logoutBtn">Log Keluar</button>
    </div>
   </header><!-- Hamburger Menu --> <button class="hamburger" id="hamburger">☰</button> <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar">
-   <div class="nav-item active" data-page="utama"><span class="nav-icon">🏠</span> <span>Laman Utama</span>
-   </div>
-   <div class="nav-item" data-page="profil"><span class="nav-icon">🏫</span> <span>Profil Sektor</span>
-   </div>
-   <div class="nav-item" data-page="perkhidmatan"><span class="nav-icon">⚙️</span> <span>Perkhidmatan</span>
-   </div>
-   <div class="nav-item" data-page="dokumen"><span class="nav-icon">📁</span> <span>Dokumen &amp; Borang</span>
-   </div>
-   <div class="nav-item" data-page="pegawai"><span class="nav-icon">👥</span> <span>Pegawai</span>
-   </div>
-   <div class="nav-item" data-page="berita"><span class="nav-icon">📰</span> <span>Berita &amp; Aktiviti</span>
-   </div>
-   <div class="nav-item" data-page="perkongsian"><span class="nav-icon">🤝</span> <span>Perkongsian</span>
-   </div>
-   <div class="nav-item" data-page="pertukaran_menengah">
-  <span class="nav-icon">🔄</span>
-  <span>Pertukaran Murid Menengah</span>
-</div>
-   <div class="nav-item" data-page="pertukaran_rendah">
-  <span class="nav-icon">🔁</span>
-  <span>Pertukaran Murid Rendah</span>
-</div>
+ <nav class="sidebar" id="sidebar">
+  <div class="nav-item active" data-page="utama"><span class="nav-icon">🏠</span> <span>Laman Utama</span></div>
+  <div class="nav-item" data-page="profil"><span class="nav-icon">🏫</span> <span>Profil Sektor</span></div>
+  <div class="nav-item" data-page="perkhidmatan"><span class="nav-icon">⚙️</span> <span>Perkhidmatan</span></div>
+  <div class="nav-item" data-page="dokumen"><span class="nav-icon">📁</span> <span>Dokumen &amp; Borang</span></div>
+  <div class="nav-item" data-page="pegawai"><span class="nav-icon">👥</span> <span>Pegawai</span></div>
+  <div class="nav-item" data-page="berita"><span class="nav-icon">📰</span> <span>Berita &amp; Aktiviti</span></div>
+  <div class="nav-item" data-page="perkongsian"><span class="nav-icon">🤝</span> <span>Perkongsian</span></div>
+  <div class="nav-item" data-page="pertukaran_menengah"><span class="nav-icon">🔄</span> <span>Pertukaran Murid Menengah</span></div>
+  <div class="nav-item" data-page="pertukaran_rendah"><span class="nav-icon">🔁</span> <span>Pertukaran Murid Rendah</span></div>
+  <div class="nav-item" data-page="statistik"><span class="nav-icon">📊</span> <span>Statistik</span></div>
+  <div class="nav-item" data-page="pekeliling"><span class="nav-icon">📋</span> <span>Pekeliling</span></div>
+  <div class="nav-item" data-page="bukupelawat"><span class="nav-icon">📖</span> <span>Buku Pelawat</span></div>
+</nav>
 
-   <div class="nav-item" data-page="statistik"><span class="nav-icon">📊</span> <span>Statistik</span>
-   </div>
-   <div class="nav-item" data-page="pekeliling"><span class="nav-icon">📋</span> <span>Pekeliling</span>
-   </div>
-   <div class="nav-item" data-page="bukupelawat"><span class="nav-icon">📖</span> <span>Buku Pelawat</span>
-   </div>
-  </nav><!-- Main Content -->
-  <main class="main-content" id="mainContent">
-   <div class="content-area" id="contentArea"></div>
-  </main><!-- Footer -->
+<!-- ================= HERO STATIK ================= -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Portal Sektor Pengurusan Sekolah</h1>
+    <p>Pejabat Pendidikan Daerah Kota Marudu</p>
+
+    <div class="hero-buttons">
+      <button class="btn-primary" onclick="currentPage='statistik'; renderCurrentPage()">📊 Statistik</button>
+      <button class="btn-outline" onclick="currentPage='pertukaran_menengah'; renderCurrentPage()">🔄 Pertukaran Murid</button>
+      <button class="btn-outline" onclick="currentPage='berita'; renderCurrentPage()">📰 Berita</button>
+    </div>
+  </div>
+</section>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+  <div class="content-area" id="contentArea"></div>
+</main>
+<!-- Footer -->
   <footer id="footer">
    <div class="footer-content">
     <div class="footer-copyright" id="footerCopyright">
@@ -1468,7 +1468,7 @@ function renderGrafPertukaran() {
 
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
-      const mainContent = document.getElementById('mainContent');
+      const Content = document.getElementById('Content');
       const footer = document.getElementById('footer');
       
       sidebar.classList.toggle('mobile-open');
@@ -1476,7 +1476,7 @@ function renderGrafPertukaran() {
       if (window.innerWidth > 768) {
         const isCollapsed = sidebar.classList.contains('collapsed');
         sidebar.classList.toggle('collapsed');
-        mainContent.classList.toggle('expanded');
+        Content.classList.toggle('expanded');
         footer.classList.toggle('expanded');
       }
     }
@@ -3920,10 +3920,11 @@ async function editPertukaranRendah(id) {
 
     window.onload = init;
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ad8d162a29ccf0c',t:'MTc2NTY2NDEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
