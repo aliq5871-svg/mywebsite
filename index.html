@@ -1153,14 +1153,28 @@ function renderGrafPertukaran() {
 }
 
 /* Mobile */
+/* ================= MOBILE ================= */
 @media (max-width:768px) {
-  .menu { display:none; }
-  .menu.active { display:block; }
-}
-  .org-line {
-    height: 16px;
+  .menu {
+    display: none;
+    flex-direction: column;
+    background: #020617;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .menu.active {
+    display: flex;
+  }
+
+  .menu-btn {
+    display: block;
   }
 }
+
 /* Avatar */
 .avatar {
   width: 100px;
@@ -3828,6 +3842,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
