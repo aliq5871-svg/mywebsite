@@ -132,43 +132,6 @@ function renderGrafPertukaran() {
   <title>Portal Sektor Pengurusan Sekolah - PPD Kota Marudu</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
-   .hero {
-  min-height: 70vh;
-  background-image: url('https://i.imgur.com/gqgGZYF.png'); /* tukar URL gambar */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-}
-
-/* Lapisan gelap supaya teks jelas */
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-}
-
-/* Kandungan teks */
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 20px;
-}
-
-.hero h1 {
-  font-size: 2.8rem;
-  margin-bottom: 10px;
-}
-
-.hero p {
-  font-size: 1.2rem;
-}
     * {
       margin: 0;
       padding: 0;
@@ -1032,6 +995,19 @@ function renderGrafPertukaran() {
         height: 60px;
       }
     }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, rgba(207, 232, 255, 0.3) 0%, rgba(255, 255, 255, 0.5) 100%);
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 30px rgba(0, 123, 255, 0.1);
+      animation: fadeIn 0.8s ease;
+      border: 1px solid rgba(0, 123, 255, 0.1);
+    }
+
     body.dark-mode .hero {
       background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(26, 26, 46, 0.5) 100%);
       border-color: rgba(0, 191, 255, 0.2);
@@ -1337,21 +1313,18 @@ function renderGrafPertukaran() {
       }
     };
 
-   async function init() {
-  const result = await window.dataSdk.init(dataHandler);
-  if (!result.isOk) {
-    showToast('❌ Sistem tidak tersedia');
-    return;
-  }
+    async function init() {
+      const result = await window.dataSdk.init(dataHandler);
+      if (!result.isOk) {
+        showToast('❌ Sistem tidak tersedia');
+        return;
+      }
 
-  setupEventListeners();
-  updateDateTime();
-  setInterval(updateDateTime, 1000);
-  checkLoginStatus();
-
-  // 🔥 WAJIB TAMBAH BARIS INI
-  renderUtama();
-}
+      setupEventListeners();
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      checkLoginStatus();
+    }
 
     function setupEventListeners() {
       document.getElementById('loginBtn').addEventListener('click', () => {
@@ -1563,71 +1536,90 @@ function renderGrafPertukaran() {
       }
     }
 
-  window.renderUtama = function renderUtama() {
-  const content = document.getElementById('contentArea');
-  const profile = allData.find(d => d.type === 'profile');
+    function renderUtama() {
+      const content = document.getElementById('contentArea');
+      const profile = allData.find(d => d.type === 'profile');
+      
+      const totalOfficers = allData.filter(d => d.type === 'officer').length;
+      const totalNews = allData.filter(d => d.type === 'news').length;
+      const totalDocuments = allData.filter(d => d.type === 'document').length;
+      const totalSharing = allData.filter(d => d.type === 'sharing').length;
+      
+      content.innerHTML = `
+        <div class="hero">
+          <h1 class="hero-title">Selamat Datang</h1>
+          <p class="hero-description">Portal Rasmi Sektor Pengurusan Sekolah<br>Pejabat Pendidikan Daerah Kota Marudu</p>
+        </div>
 
-  const totalOfficers = allData.filter(d => d.type === 'officer').length;
-  const totalNews = allData.filter(d => d.type === 'news').length;
-  const totalDocuments = allData.filter(d => d.type === 'document').length;
-  const totalSharing = allData.filter(d => d.type === 'sharing').length;
+        <div class="card">
+          <h2 class="card-title">📚 Visi & Misi</h2>
+          <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.3rem;">Visi</h3>
+          <p style="margin-bottom: 1.5rem; line-height: 1.8; color: #555;">
+            ${profile && profile.vision ? profile.vision : 'Pendidikan Berkualiti, Insan Terdidik, Negara Sejahtera.'}
+          </p>
+          
+          <h3 style="color: #007bff; margin-bottom: 0.5rem; font-size: 1.3rem;">Misi</h3>
+          <p style="line-height: 1.8; color: #555;">
+            ${profile && profile.mission ? profile.mission : 'Melestarikan sistem pendidikan yang berkualiti untuk membangunkan potensi individu bagi memenuhi aspirasi negara.'}
+          </p>
+        </div>
 
-  content.innerHTML = `
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <h1 class="hero-title">Selamat Datang</h1>
-        <p class="hero-description">Portal Rasmi PPD Kota Marudu</p>
-      </div>
-    </section>
+        <div class="card">
+          <h2 class="card-title">🎯 Fokus Utama & Fungsi</h2>
+          <div class="grid">
+            <div class="grid-item">
+              <h3 style="color: #007bff; margin-bottom: 0.8rem; font-size: 1.2rem;">🏫 1. Memastikan Pengoperasian Sekolah Yang Efektif</h3>
+              <p style="line-height: 1.6; color: #666;">Menjamin semua sekolah dalam daerah beroperasi dengan teratur, mematuhi dasar KPM, serta mengekalkan persekitaran pembelajaran selamat dan kondusif.</p>
+            </div>
+            <div class="grid-item">
+              <h3 style="color: #007bff; margin-bottom: 0.8rem; font-size: 1.2rem;">👨‍💼 2. Meningkatkan Kualiti Kepimpinan & Pengurusan Sekolah</h3>
+              <p style="line-height: 1.6; color: #666;">Memperkasakan kepimpinan Pengetua/Guru Besar melalui bimbingan, pemantauan dan intervensi berfokus.</p>
+            </div>
+            <div class="grid-item">
+              <h3 style="color: #007bff; margin-bottom: 0.8rem; font-size: 1.2rem;">📚 3. Memacu Prestasi Akademik & Sahsiah Murid</h3>
+              <p style="line-height: 1.6; color: #666;">Menyokong pelaksanaan kurikulum, PBD, program intervensi akademik serta memastikan kesejahteraan dan perkembangan murid.</p>
+            </div>
+            <div class="grid-item">
+              <h3 style="color: #007bff; margin-bottom: 0.8rem; font-size: 1.2rem;">📊 4. Menjamin Ketepatan & Integriti Data Pendidikan</h3>
+              <p style="line-height: 1.6; color: #666;">Mengurus, menyelaras dan memantau data sekolah (APDM, EMIS, SPLKPM, e-Operasi dan lain-lain) untuk keputusan yang tepat.</p>
+            </div>
+            <div class="grid-item">
+              <h3 style="color: #007bff; margin-bottom: 0.8rem; font-size: 1.2rem;">✅ 5. Memastikan Pematuhan Dasar & Keperluan Perundangan</h3>
+              <p style="line-height: 1.6; color: #666;">Melaksanakan pemantauan kepatuhan dalam aspek kurikulum, keselamatan, disiplin, pentadbiran dan pengurusan sekolah.</p>
+            </div>
+          </div>
+        </div>
 
-    <!-- MAKLUMAN -->
-    <div class="card">
-      <h2 class="card-title">📢 Makluman</h2>
-      <p>Sila pilih menu di sebelah kiri.</p>
-    </div>
-
-    <!-- VISI & MISI -->
-    <div class="card">
-      <h2 class="card-title">📚 Visi & Misi</h2>
-
-      <h3 style="color:#007bff">Visi</h3>
-      <p>
-        ${profile?.vision || 'Pendidikan Berkualiti, Insan Terdidik, Negara Sejahtera.'}
-      </p>
-
-      <h3 style="color:#007bff;margin-top:1rem">Misi</h3>
-      <p>
-        ${profile?.mission || 'Melestarikan sistem pendidikan yang berkualiti untuk membangunkan potensi individu.'}
-      </p>
-    </div>
-
-    <!-- FOKUS -->
-    <div class="card">
-      <h2 class="card-title">🎯 Fokus Utama & Fungsi</h2>
-      <div class="grid">
-        <div class="grid-item">🏫 Memastikan pengoperasian sekolah berkesan</div>
-        <div class="grid-item">👨‍💼 Memperkasa kepimpinan sekolah</div>
-        <div class="grid-item">📚 Memacu prestasi murid</div>
-        <div class="grid-item">📊 Ketepatan data pendidikan</div>
-        <div class="grid-item">✅ Pematuhan dasar</div>
-      </div>
-    </div>
-
-    <!-- STATISTIK -->
-    <div class="card">
-      <h2 class="card-title">📊 Statistik Ringkas</h2>
-      <div class="grid">
-        <div class="grid-item">👥 ${totalOfficers} Pegawai</div>
-        <div class="grid-item">📰 ${totalNews} Berita</div>
-        <div class="grid-item">📄 ${totalDocuments} Dokumen</div>
-        <div class="grid-item">🤝 ${totalSharing} Perkongsian</div>
-      </div>
-    </div>
-  `;
-}
-
+        <div class="card">
+          <h2 class="card-title">📊 Statistik Ringkas</h2>
+          <div class="grid">
+            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff; text-align: center;">
+              <div style="font-size: 3rem; margin-bottom: 0.5rem;">👥</div>
+              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${totalOfficers}</h3>
+              <p style="color: #666; font-weight: 600;">Jumlah Pegawai</p>
+            </div>
+            
+            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
+              <div style="font-size: 3rem; margin-bottom: 0.5rem;">📰</div>
+              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${totalNews}</h3>
+              <p style="color: #666; font-weight: 600;">Berita & Aktiviti</p>
+            </div>
+            
+            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 123, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%); border-left: 4px solid #007bff; text-align: center;">
+              <div style="font-size: 3rem; margin-bottom: 0.5rem;">📄</div>
+              <h3 style="font-size: 2.5rem; font-weight: 700; color: #007bff; margin-bottom: 0.5rem;">${totalDocuments}</h3>
+              <p style="color: #666; font-weight: 600;">Dokumen</p>
+            </div>
+            
+            <div class="grid-item" style="background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 123, 255, 0.05) 100%); border-left: 4px solid #00bfff; text-align: center;">
+              <div style="font-size: 3rem; margin-bottom: 0.5rem;">🤝</div>
+              <h3 style="font-size: 2.5rem; font-weight: 700; color: #00bfff; margin-bottom: 0.5rem;">${totalSharing}</h3>
+              <p style="color: #666; font-weight: 600;">Perkongsian</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
 
    function renderProfil() {
   const content = document.getElementById('contentArea');
@@ -3838,11 +3830,6 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
-
-
-
-
-
 
 
 
