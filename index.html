@@ -1560,7 +1560,7 @@ function renderGrafPertukaran() {
       }
     }
 
-   function renderUtama() {
+  window.renderUtama = function renderUtama() {
   const content = document.getElementById('contentArea');
   const profile = allData.find(d => d.type === 'profile');
 
@@ -3835,6 +3835,7 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
+
 
 
 
