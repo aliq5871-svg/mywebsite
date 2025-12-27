@@ -132,6 +132,19 @@ function renderGrafPertukaran() {
   <title>Portal Sektor Pengurusan Sekolah - PPD Kota Marudu</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
   <style>
+/* ===== FOOTER UCAPAN PPD ===== */
+.ppd-divider {
+  margin: 1.8rem 0 1.2rem;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+.ppd-footer {
+  font-size: 0.95rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
     * {
       margin: 0;
       padding: 0;
@@ -329,6 +342,70 @@ function renderGrafPertukaran() {
     body.dark-mode .login-btn:hover {
       box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
     }
+    /* ===== KAD UCAPAN PPD ===== */
+.ppd-card-section {
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.ppd-card {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* ===== GAMBAR PPD SAIZ TETAP ===== */
+.ppd-image {
+  width: 360px;          /* 🔒 SAIZ TETAP */
+  height: 920px;         /* 🔒 SAIZ TETAP */
+  flex-shrink: 0;        /* ⛔ Elak ikut teks */
+  overflow: hidden;
+}
+
+.ppd-image img {
+  width: 100%;
+  height: 95%;
+  object-fit: cover;     /* Potong kemas tanpa herot */
+}
+
+.ppd-content {
+  flex: 1.3;
+  padding: 2.5rem;
+}
+
+.ppd-content h3 {
+  font-size: 1.6rem;
+  color: #1e3a8a;
+  margin-bottom: 0.5rem;
+}
+
+.ppd-name {
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.ppd-message {
+  color: #4b5563;
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+/* ===== RESPONSIVE (MOBILE) ===== */
+@media (max-width: 768px) {
+  .ppd-card {
+    flex-direction: column;
+  }
+
+  .ppd-image {
+    height: 260px;
+  }
+
+  .ppd-content {
+    padding: 1.5rem;
+    text-align: center;
+  }
+}
 
     /* Sidebar */
     .sidebar {
@@ -1550,6 +1627,45 @@ function renderGrafPertukaran() {
           <h1 class="hero-title">Selamat Datang</h1>
           <p class="hero-description">Portal Rasmi Sektor Pengurusan Sekolah<br>Pejabat Pendidikan Daerah Kota Marudu</p>
         </div>
+        <!-- ================= KAD UCAPAN PPD ================= -->
+<section class="ppd-card-section">
+  <div class="ppd-card">
+    
+    <!-- GAMBAR -->
+    <div class="ppd-image">
+      <img src="https://i.imgur.com/sA9J7Nb.png" alt="PPD Kota Marudu">
+    </div>
+
+    <div class="ppd-content">
+
+  <!-- UCAPAN -->
+  <h3>Ucapan Pegawai Pendidikan Daerah</h3>
+  <p class="ppd-message">
+    Dengan penuh rasa syukur, saya mengalu-alukan kehadiran semua warga pendidikan ke Portal Utama Sektor Pengurusan Sekolah (SPS) Pejabat Pendidikan Daerah Kota Marudu.
+
+Portal ini dibangunkan sebagai medium sehenti bagi memperkukuh pengurusan sekolah melalui penyampaian maklumat yang tepat, pantas dan sistematik. Ia juga berfungsi sebagai platform sokongan kepada pihak sekolah khususnya dalam urusan pentadbiran, pengurusan murid, data sekolah serta pelaksanaan dasar dan pekeliling pendidikan semasa.
+
+Seiring dengan aspirasi Kementerian Pendidikan Malaysia, portal ini diharap dapat meningkatkan kecekapan penyampaian perkhidmatan, memperkukuh tadbir urus sekolah serta memupuk budaya kerja yang berintegriti, profesional dan berfokuskan kualiti.
+
+Akhir kata, saya merakamkan penghargaan dan terima kasih kepada semua pihak yang terlibat dalam pembangunan dan pengoperasian portal ini. Semoga Portal Utama SPS PPD Kota Marudu dimanfaatkan sepenuhnya demi kecemerlangan pendidikan di daerah ini.
+
+Sekian, terima kasih.
+  </p>
+
+  <!-- GARIS PEMISAH -->
+  <hr class="ppd-divider">
+
+  <!-- MAKLUMAT JAWATAN -->
+  <div class="ppd-footer">
+    <strong>Pegawai Pendidikan Daerah</strong><br>
+    Pejabat Pendidikan Daerah Kota Marudu
+  </div>
+
+</div>
+
+
+  	</div>
+	</section>
 
         <div class="card">
           <h2 class="card-title">📚 Visi & Misi</h2>
@@ -3830,7 +3946,6 @@ async function editPertukaranRendah(id) {
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html> 
-
 
 
 
