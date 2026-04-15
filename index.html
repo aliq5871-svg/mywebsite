@@ -1382,12 +1382,15 @@ function renderGrafPertukaran() {
     let currentUser = null;
 
     const dataHandler = {
-      onDataChanged(data) {
-        allData = data;
-        renderCurrentPage();
-        updateHeader();
-        updateFooter();
-      }
+     onDataChanged(data) {
+  allData = data;
+
+  checkLoginStatus(); // 🔥 WAJIB TAMBAH
+
+  renderCurrentPage();
+  updateHeader();
+  updateFooter();
+}
     };
 
     async function init() {
@@ -1491,33 +1494,19 @@ function renderGrafPertukaran() {
       const users = allData.filter(d => d.type === 'user');
       let user = users.find(u => u.username === username && u.password === password);
 
-      if (!user) {
-        if (username === 'admin' && password === 'adminsps') {
-          const newUser = {
-            type: 'user',
-            username: 'admin',
-            password: 'adminsps',
-            role: 'admin',
-            timestamp: new Date().toISOString()
-          };
-          const result = await window.dataSdk.create(newUser);
-          if (result.isOk) {
-            user = { ...newUser, __backendId: 'temp' };
-          }
-        } else if (username === 'superadmin' && password === 'akuadmin') {
-          const newUser = {
-            type: 'user',
-            username: 'superadmin',
-            password: 'akuadmin',
-            role: 'superadmin',
-            timestamp: new Date().toISOString()
-          };
-          const result = await window.dataSdk.create(newUser);
-          if (result.isOk) {
-            user = { ...newUser, __backendId: 'temp' };
-          }
-        }
-      }
+     if (!user) {
+  if (username === 'admin' && password === 'adminsps') {
+    user = {
+      username: 'admin',
+      role: 'admin'
+    };
+  } else if (username === 'superadmin' && password === 'akuadmin') {
+    user = {
+      username: 'superadmin',
+      role: 'superadmin'
+    };
+  }
+}
 
       if (user) {
         isAdmin = true;
@@ -3975,3 +3964,5 @@ async function editPertukaranRendah(id) {
 
 
 
+
+   
