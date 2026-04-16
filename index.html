@@ -1296,17 +1296,6 @@ function renderGrafPertukaran() {
 .status-select.status-bengkel { background:#f97316; }
 .status-select.status-keluar { background:#6b7280; }
 
-.ppd-card {
-  position: relative; /* WAJIB supaya absolute ikut kad */
-}
-
-.ppd-image-bottom {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 80px;   /* boleh ubah saiz */
-  opacity: 0.9;  /* optional untuk efek lembut */
-}
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
@@ -1636,9 +1625,7 @@ function renderGrafPertukaran() {
     </div>
 
     <div class="ppd-content">
-	</div>
-<!-- GAMBAR HIASAN KANAN BAWAH -->
-<img src="https://i.imgur.com/qVcNpcb.jpeg" class="ppd-image-bottom" alt="hiasan">
+	
   <!-- UCAPAN -->
   <h3>Ucapan Pegawai Pendidikan Daerah</h3>
   <p class="ppd-message">
